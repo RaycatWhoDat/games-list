@@ -47,13 +47,13 @@
     <body class="flex flex-column justify-center items-center mb5">
         <div class="mv4 pv2 w-80">
             <div class="f5 bg-near-black white tl">
-                <p class="ma0 mt2 ml2 pv1">LAST UPDATED: <2024-04-27 Sat></p>
+                <p class="ma0 mt2 ml2 pv1">&nbsp;</p>
             </div>
             <div class="rozha-one-regular measure f-headline tr">
                 <p class="mh0 mv3">[games]</p>
             </div>
             <div class="f5 bg-near-black white tr b">
-                <p class="ma0 mt2 mr2 pv1">As selected by <a class="link pointer usn light-blue dim" href="https://twitter.com/RaycatWhoDat">RaycatWhoDat</a></p>
+                <p class="ma0 mt2 mr2 pv1"><span class="entries-count"></span> as selected by <a class="link pointer usn light-blue dim" href="https://twitter.com/RaycatWhoDat">RaycatWhoDat</a></p>
             </div>
         </div>
 
@@ -189,18 +189,18 @@
 
         <div class="row mb2 flex w-80">
             <div class="image mr2 w-third ba bw1 b--near-black bg-light-gray dim" data-href="">
-                <img alt="" src="https://placehold.co/600x400" />
-                <span>...</span>
+                <img alt="" src="" />
+                <span>N/A</span>
             </div>
 
             <div class="image mr2 w-third ba bw1 b--near-black bg-light-gray dim" data-href="">
-                <img alt="" src="https://placehold.co/600x400" />
-                <span>...</span>
+                <img alt="" src="" />
+                <span>N/A</span>
             </div>
 
             <div class="image w-third ba bw1 b--near-black bg-light-gray dim" data-href="">
-                <img alt="" src="https://placehold.co/600x400" />
-                <span>...</span>
+                <img alt="" src="" />
+                <span>N/A</span>
             </div>
         </div>
         
@@ -210,12 +210,22 @@
 
         <script>
             const imagesWithData = document.querySelectorAll('.image[data-href]');
+
+            let totalEntries = 0;
+            
             imagesWithData.forEach(elem => {
+              if (!elem.dataset.href) return;
+
+              totalEntries += 1;
+              
               elem.classList.add('pointer');
               elem.addEventListener('click', () => {
                 window.location.href = elem.dataset.href;
               });
             });
+
+            const entriesCount = document.querySelector('.entries-count');
+            entriesCount.textContent = `${totalEntries} games`;
         </script>
     </body>
 </html>
