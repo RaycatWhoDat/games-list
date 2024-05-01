@@ -140,6 +140,7 @@
               { name: 'Mecha Simultactics', image: 'https://i.imgur.com/JIWQGTB.jpeg', url: 'https://store.steampowered.com/app/2738660/Mecha_Simultactics/' },
               { name: 'N++', image: 'https://i.imgur.com/rqTBOtZ.jpeg', url: 'https://store.steampowered.com/app/230270/N_NPLUSPLUS/' },
               { name: 'Hylics 2', image: 'https://i.imgur.com/3VFAMBL.jpeg', url: 'https://store.steampowered.com/app/1286710/Hylics_2/' },
+              { name: 'Critters for Sale', image: 'https://i.imgur.com/dAAMvWr.jpeg', url: 'https://store.steampowered.com/app/1078420/Critters_for_Sale/' },
               { name: 'Ex-Zodiac', image: 'https://i.imgur.com/BuLSvu1.jpeg', url: 'https://store.steampowered.com/app/1249480/ExZodiac/' },
               { name: 'Felvidek', image: 'https://i.imgur.com/udmUhzk.jpeg', url: 'https://store.steampowered.com/app/2299900/Felvidek/' },
               { name: 'The Many Pieces of Mr. Coo', image: 'https://i.imgur.com/EdpsRcq.jpeg', url: 'https://store.steampowered.com/app/1602560/The_Many_Pieces_of_Mr_Coo/' },
@@ -191,6 +192,7 @@
               { name: 'Hotline Miami', image: 'https://i.imgur.com/401Xrdw.jpeg', url: 'https://store.steampowered.com/app/219150/Hotline_Miami/' },
               { name: 'Monster Train', image: 'https://i.imgur.com/og4sQhj.jpeg', url: 'https://store.steampowered.com/app/1102190/Monster_Train/' },
               { name: 'Starseed Pilgrim', image: 'https://i.imgur.com/ZJ3Eeh0.jpeg', url: 'https://store.steampowered.com/app/230980/Starseed_Pilgrim/' },
+              { name: 'R4: Ridge Racer Type-4', image: 'https://i.imgur.com/VpGBcBU.jpeg', url: '' },
             ];
                         
             const entriesCount = document.querySelector('.entries-count');
@@ -201,7 +203,7 @@
             
             GAMES.forEach(({ name, image, url }, index) => {
               const entryElem = document.createElement('div');
-              entryElem.classList.add('image', 'w-third', 'ba', 'bw1', 'b--near-black', 'bg-light-gray', 'dim', 'pointer');
+              entryElem.classList.add('image', 'w-third', 'ba', 'bw1', 'b--near-black', 'bg-light-gray', 'usn');
               if (index % 3 !== 2) entryElem.classList.add('mr2');
               
               const imageElem = document.createElement('img');
@@ -212,21 +214,24 @@
               const textElem = document.createElement('span');
               textElem.textContent = name;
               entryElem.appendChild(textElem);
-              
-              entryElem.addEventListener('click', () => {
-                window.open(url, '_blank').focus();
-              });
+
+              if (url) {
+                entryElem.classList.add('dim', 'pointer');
+
+                entryElem.addEventListener('click', () => {
+                  window.open(url, '_blank').focus();
+                });
+              } 
 
               if (index % 3) {
                 const rowElem = allGames.querySelector('.row:last-child');
-                rowElem.appendChild(entryElem);
-                allGames.appendChild(rowElem);
               } else {
                 const rowElem = document.createElement('div');
                 rowElem.classList.add('row', 'mb2', 'flex');
-                rowElem.appendChild(entryElem);
-                allGames.appendChild(rowElem);
               }
+              
+              rowElem.appendChild(entryElem);
+              allGames.appendChild(rowElem);
             });
 
             gamesContainer.appendChild(allGames);
