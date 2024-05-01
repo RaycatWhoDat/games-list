@@ -225,13 +225,14 @@
 
               if (index % 3) {
                 const rowElem = allGames.querySelector('.row:last-child');
+                rowElem.appendChild(entryElem);
+                allGames.appendChild(rowElem);
               } else {
                 const rowElem = document.createElement('div');
                 rowElem.classList.add('row', 'mb2', 'flex');
+                rowElem.appendChild(entryElem);
+                allGames.appendChild(rowElem);
               }
-              
-              rowElem.appendChild(entryElem);
-              allGames.appendChild(rowElem);
             });
 
             gamesContainer.appendChild(allGames);
