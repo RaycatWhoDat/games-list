@@ -77,173 +77,57 @@
         </div>
 
         <script>
-            const GAMES = [
-              { name: '@RegalPigeon', image: 'https://i.imgur.com/pAX9Vdy.png', url: 'https://twitter.com/RegalPigeon/status/1787098418264862835' },
-              { name: 'Screenbound', image: 'https://i.imgur.com/ssnHFwj.jpeg', url: 'https://store.steampowered.com/app/2805070/Screenbound/' },
-              { name: 'DREDGE', image: 'https://i.imgur.com/IxKDOYW.jpeg', url: 'https://store.steampowered.com/app/1562430/DREDGE/' },
-              { name: 'Papers, Please', image: 'https://i.imgur.com/B7WtOWx.jpeg', url: 'https://store.steampowered.com/app/239030/Papers_Please/' },
-              { name: '4D Golf', image: 'https://i.imgur.com/KzZ2i4l.jpeg', url: 'https://store.steampowered.com/app/2147950/4D_Golf/' },
-              { name: 'Bye Sweet Carole', image: 'https://i.imgur.com/bAr3oCQ.jpeg', url: 'https://store.steampowered.com/app/2428980/Bye_Sweet_Carole/' },
-              { name: 'Surmount: A Mountain Climbing Adventure', image: 'https://i.imgur.com/CVN2o9Q.jpeg', url: 'https://store.steampowered.com/app/1675000/Surmount_A_Mountain_Climbing_Adventure/' },
-              { name: 'All You Need is Help', image: 'https://i.imgur.com/qUCz7AT.png', url: 'https://twitter.com/PixelJunkNews/status/1785006270921236954' },
-              { name: '@xewlupus', image: 'https://i.imgur.com/Y2YXYDM.png', url: 'https://twitter.com/xewlupus/status/1777149741731865076' },
-              { name: '@Bandygrass', image: 'https://i.imgur.com/kyV1YIH.png', url: 'https://twitter.com/Bandygrass/status/1784662893600108578' },
-              { name: 'Ghost Hand', image: 'https://i.imgur.com/SdlMtZo.jpeg', url: 'https://store.steampowered.com/app/2563880/Ghost_Hand/' },
-              { name: 'Wind Runners', image: 'https://i.imgur.com/z1cPRsL.jpeg', url: 'https://store.steampowered.com/app/1101370/Wind_Runners/' },
-              { name: 'RADIOSOL', image: 'https://i.imgur.com/hcT8KVc.jpeg', url: 'https://store.steampowered.com/app/2934330/RADIOSOL/' },
-              { name: 'Citrus Shores', image: 'https://i.imgur.com/SGKD2GJ.png', url: 'https://twitter.com/Cornf_Blue/status/1784256540590952728' },
-              { name: 'Back to the Dawn', image: 'https://i.imgur.com/JrO99Iu.jpeg', url: 'https://store.steampowered.com/app/1735700/Back_to_the_Dawn/' },
-              { name: 'The Plucky Squire', image: 'https://i.imgur.com/alAhooD.png', url: 'https://twitter.com/apossf/status/1782769129532850182' },
-              { name: 'NIGHTMARE OPERATOR', image: 'https://i.imgur.com/hz6wUIa.jpeg', url: 'https://store.steampowered.com/app/2957360/NIGHTMARE_OPERATOR/' },
-              { name: 'Parking Garage Rally Circuit', image: 'https://i.imgur.com/OKNHFG0.jpeg', url: 'https://store.steampowered.com/app/2737300/Parking_Garage_Rally_Circuit/' },
-              { name: 'Dream Tactics', image: 'https://i.imgur.com/4t1JkAL.jpeg', url: 'https://store.steampowered.com/app/1897650/Dream_Tactics/' },
-              { name: 'Harold Halibut', image: 'https://i.imgur.com/FGY5tCn.jpeg', url: 'https://store.steampowered.com/app/924750/Harold_Halibut/' },
-              { name: '@melonkoi', image: 'https://i.imgur.com/xv74Zc5.png', url: 'https://twitter.com/melonkoi/status/1779322326309384563' },
-              { name: 'Decline\'s Drops', image: 'https://i.imgur.com/KDXFJhi.png', url: 'https://twitter.com/moulinauxbulles/status/1781011293010366774' },
-              { name: 'Precursor', image: 'https://i.imgur.com/42MRWyY.png', url: 'https://twitter.com/JanOrszulik/status/1781013720476315848' },
-              { name: 'Bumpers & Broadswords Maximum', image: 'https://i.imgur.com/WUaWwex.png', url: 'https://hwilson.itch.io/bbmax' },
-              { name: 'Ants Took My Eyeball', image: 'https://i.imgur.com/qVHSCkI.jpeg', url: 'https://store.steampowered.com/app/1627890/Ants_Took_My_Eyeball/' },
-              { name: 'Mojito the Cat', image: 'https://i.imgur.com/rbmWHbO.jpeg', url: 'https://store.steampowered.com/app/1798950/Mojito_the_Cat/' },
-              { name: 'Dungeons of Hinterberg', image: 'https://i.imgur.com/pqnjjyF.png', url: 'https://twitter.com/MicrobirdGames/status/1775143085489438885' },
-              { name: 'Sunset Devils', image: 'https://i.imgur.com/6CCErtj.jpeg', url: 'https://store.steampowered.com/app/2695810/Sunset_Devils/' },
-              { name: 'Ruffy and the Riverside', image: 'https://i.imgur.com/GsQR3qD.jpeg', url: 'https://store.steampowered.com/app/1002260/Ruffy_and_the_Riverside/' },
-              { name: 'MINDWAVE', image: 'https://i.imgur.com/gGkxHrR.jpeg', url: 'https://store.steampowered.com/app/2701030/MINDWAVE/' },
-              { name: 'Knuckle Sandwich', image: 'https://i.imgur.com/6Rsbs72.jpeg', url: 'https://store.steampowered.com/app/1012570/Knuckle_Sandwich/' },
-              { name: '@AlexStrook', image: 'https://i.imgur.com/Y42lDrv.png', url: 'https://twitter.com/AlexStrook/status/1778831995528720846' },
-              { name: 'RollScape', image: 'https://i.imgur.com/qwADBTw.jpeg', url: 'https://store.steampowered.com/app/2904290/RollScape/' },
-              { name: 'DemonCrawl', image: 'https://i.imgur.com/iD2EdMM.jpeg', url: 'https://store.steampowered.com/app/1141220/DemonCrawl/' },
-              { name: 'Airframe Ultra', image: 'https://i.imgur.com/wtsJEcY.jpeg', url: 'https://store.steampowered.com/app/2522120/Airframe_Ultra/' },
-              { name: '@andmish', image: 'https://i.imgur.com/mjTeIeS.png', url: 'https://twitter.com/andmish/status/1775493287773643002' },
-              { name: '@artofsully', image: 'https://i.imgur.com/WtUSu1r.png', url: 'https://twitter.com/artofsully/status/1773427538276065721' },
-              { name: 'Record of Lodoss War-Deedlit in Wonder Labyrinth-', image: 'https://i.imgur.com/rAdfLji.jpeg', url: 'https://store.steampowered.com/app/1203630/Record_of_Lodoss_WarDeedlit_in_Wonder_Labyrinth/' },
-              { name: 'DRAINUS', image: 'https://i.imgur.com/2LHhvEy.jpeg', url: 'https://store.steampowered.com/app/1975360/DRAINUS/' },
-              { name: 'Touhou: Luna Nights', image: 'https://i.imgur.com/LovHyyG.jpeg', url: 'https://store.steampowered.com/app/851100/Touhou_Luna_Nights/' },
-              { name: 'Hand of the Divine', image: 'https://media-cdn.play.date/media/games/279028/websiteFeature_EMvgrkR.png', url: 'https://play.date/games/hand-of-the-divine/' },
-              { name: 'what the CROW?!', image: 'https://media-cdn.play.date/media/games/243232/Web_feature_Hz2C90l.png', url: 'https://play.date/games/what-the-crow/' },
-              { name: 'Mars After Midnight', image: 'https://media-cdn.play.date/media/games/161341/Web_feature_HCIlQcK.png', url: 'https://play.date/games/mars-after-midnight/' },
-              { name: 'Pullfrog Playdate Deluxe', image: 'https://media-cdn.play.date/media/games/146795/t2.png', url: 'https://play.date/games/pullfrog/' },
-              { name: 'Under The Castle', image: 'https://media-cdn.play.date/media/games/212490/Website_Featured.png', url: 'https://play.date/games/under-the-castle/' },
-              { name: 'The Zachtronics Puzzle Pack', image: 'https://i.imgur.com/jwu4JOv.png', url: 'https://store.steampowered.com/bundle/2925/The_Zachtronics_Puzzle_Pack/' },
-              { name: 'NERTS! Online', image: 'https://i.imgur.com/edEXYp5.jpeg', url: 'https://store.steampowered.com/app/1131190/NERTS_Online/' },
-              { name: 'Dwarf Fortress', image: 'https://i.imgur.com/Qi12tGm.jpeg', url: 'https://store.steampowered.com/app/975370/Dwarf_Fortress/' },
-              { name: 'Mosa Lina', image: 'https://i.imgur.com/21pNtkE.jpeg', url: 'https://store.steampowered.com/app/2477090/Mosa_Lina/' },
-              { name: 'Sea of Stars', image: 'https://i.imgur.com/WahK6sQ.jpeg', url: 'https://store.steampowered.com/app/1244090/Sea_of_Stars/' },
-              { name: 'Cobalt Core', image: 'https://i.imgur.com/ha5aSri.jpeg', url: 'https://store.steampowered.com/app/2179850/Cobalt_Core/' },
-              { name: 'The Zachtronics Solitaire Collection', image: 'https://i.imgur.com/Wzp0TP5.jpeg', url: 'https://store.steampowered.com/app/1988540/The_Zachtronics_Solitaire_Collection/' },
-              { name: 'Disco Elysium', image: 'https://i.imgur.com/4slsqHB.jpeg', url: 'https://store.steampowered.com/app/632470/Disco_Elysium__The_Final_Cut/' },
-              { name: 'Balatro', image: 'https://i.imgur.com/IA4rtGc.jpeg', url: 'https://store.steampowered.com/app/2379780/Balatro/' },
-              { name: 'Touhou: Lost Branch of Legend', image: 'https://i.imgur.com/Drbv6Wi.jpeg', url: 'https://store.steampowered.com/app/1140150/Touhou_Lost_Branch_of_Legend/' },
-              { name: 'Bomb Rush Cyberfunk', image: 'https://i.imgur.com/DyeP4d4.jpeg', url: 'https://store.steampowered.com/app/1353230/Bomb_Rush_Cyberfunk/' },
-              { name: 'Shotgun King: The Final Checkmate', image: 'https://i.imgur.com/JLBBwZh.jpeg', url: 'https://store.steampowered.com/app/1972440/Shotgun_King_The_Final_Checkmate/' },
-              { name: 'Void Stranger', image: 'https://i.imgur.com/6Qpcqw5.jpeg', url: 'https://store.steampowered.com/app/2121980/Void_Stranger/' },
-              { name: '5D Chess With Multiverse Time Travel', image: 'https://i.imgur.com/sbYyw3Y.jpeg', url: 'https://store.steampowered.com/app/1349230/5D_Chess_With_Multiverse_Time_Travel/' },
-              { name: 'HITMAN: World of Assassination', image: 'https://i.imgur.com/ufkmK8z.jpeg', url: 'https://store.steampowered.com/app/1659040/HITMAN_World_of_Assassination/' },
-              { name: 'Rift Wizard 2', image: 'https://i.imgur.com/2Ftsoy4.jpeg', url: 'https://store.steampowered.com/app/2058570/Rift_Wizard_2/' },
-              { name: 'Darkwood', image: 'https://i.imgur.com/PsxuAlY.jpeg', url: 'https://store.steampowered.com/app/274520/Darkwood/' },
-              { name: '(the) Gnorp Apologue', image: 'https://i.imgur.com/SVXLFMO.jpeg', url: 'https://store.steampowered.com/app/1473350/the_Gnorp_Apologue/' },
-              { name: 'Retro Gadgets', image: 'https://i.imgur.com/Ffj1gFN.jpeg', url: 'https://store.steampowered.com/app/1730260/Retro_Gadgets/' },
-              { name: 'Pizza Tower', image: 'https://i.imgur.com/ErJG49B.jpeg', url: 'https://store.steampowered.com/app/2231450/Pizza_Tower/' },
-              { name: 'Midnight Fight Express', image: 'https://i.imgur.com/Cc2OZSe.jpeg', url: 'https://store.steampowered.com/app/1390410/Midnight_Fight_Express/' },
-              { name: 'Mecha Simultactics', image: 'https://i.imgur.com/JIWQGTB.jpeg', url: 'https://store.steampowered.com/app/2738660/Mecha_Simultactics/' },
-              { name: 'N++', image: 'https://i.imgur.com/rqTBOtZ.jpeg', url: 'https://store.steampowered.com/app/230270/N_NPLUSPLUS/' },
-              { name: 'Hylics 2', image: 'https://i.imgur.com/3VFAMBL.jpeg', url: 'https://store.steampowered.com/app/1286710/Hylics_2/' },
-              { name: 'Critters for Sale', image: 'https://i.imgur.com/dAAMvWr.jpeg', url: 'https://store.steampowered.com/app/1078420/Critters_for_Sale/' },
-              { name: 'Ex-Zodiac', image: 'https://i.imgur.com/BuLSvu1.jpeg', url: 'https://store.steampowered.com/app/1249480/ExZodiac/' },
-              { name: 'Felvidek', image: 'https://i.imgur.com/udmUhzk.jpeg', url: 'https://store.steampowered.com/app/2299900/Felvidek/' },
-              { name: 'The Many Pieces of Mr. Coo', image: 'https://i.imgur.com/EdpsRcq.jpeg', url: 'https://store.steampowered.com/app/1602560/The_Many_Pieces_of_Mr_Coo/' },
-              { name: 'Transistor', image: 'https://i.imgur.com/eoeS2Ej.jpeg', url: 'https://store.steampowered.com/app/237930/Transistor/' },
-              { name: 'Kingdoms of the Dump', image: 'https://i.imgur.com/2uZFAoa.png', url: 'https://twitter.com/DumpKingdoms/status/1761349703289946393' },
-              { name: 'MARVEL SNAP', image: 'https://i.imgur.com/JsBoI6Y.jpeg', url: 'https://store.steampowered.com/app/1997040/MARVEL_SNAP/' },
-              { name: 'Coromon', image: 'https://i.imgur.com/jzjUMAv.jpeg', url: 'https://store.steampowered.com/app/1218210/Coromon/' },
-              { name: 'Quadrilateral Cowboy', image: 'https://i.imgur.com/Mk5X1Ke.jpeg', url: 'https://store.steampowered.com/app/240440/Quadrilateral_Cowboy/' },
-              { name: 'Dicey Dungeons', image: 'https://i.imgur.com/GkJVNna.jpeg', url: 'https://store.steampowered.com/app/861540/Dicey_Dungeons/' },
-              { name: 'Your Only Move is HUSTLE', image: 'https://i.imgur.com/qzpoSXi.jpeg', url: 'https://store.steampowered.com/app/2212330/Your_Only_Move_Is_HUSTLE/' },
-              { name: 'The Cat Lady', image: 'https://i.imgur.com/SuLn0n2.jpeg', url: 'https://store.steampowered.com/app/253110/The_Cat_Lady/' },
-              { name: 'Hypnospace Outlaw', image: 'https://i.imgur.com/9jD6t1l.jpeg', url: 'https://store.steampowered.com/app/844590/Hypnospace_Outlaw/' },
-              { name: 'Brutal Orchestra', image: 'https://i.imgur.com/BEM58ZA.jpeg', url: 'https://store.steampowered.com/app/1734320/Brutal_Orchestra/' },
-              { name: 'Invisible, Inc.', image: 'https://i.imgur.com/ANKB6Ef.jpeg', url: 'https://store.steampowered.com/app/243970/Invisible_Inc/' },
-              { name: 'Lethal League Blaze', image: 'https://i.imgur.com/wkg8sXw.jpeg', url: 'https://store.steampowered.com/app/553310/Lethal_League_Blaze/' },
-              { name: 'Baba is You', image: 'https://i.imgur.com/WqWmQiN.jpeg', url: 'https://store.steampowered.com/app/736260/Baba_Is_You/' },
-              { name: 'Pepper Grinder', image: 'https://i.imgur.com/tqWtwn6.jpeg', url: 'https://store.steampowered.com/app/2076580/Pepper_Grinder/' },
-              { name: 'Subsurface Circular', image: 'https://i.imgur.com/lRxHJ3P.jpeg', url: 'https://store.steampowered.com/app/676820/Subsurface_Circular/' },
-              { name: 'Sifu', image: 'https://i.imgur.com/F56r4ij.jpeg', url: 'https://store.steampowered.com/app/2138710/Sifu/' },
-              { name: 'Super Lone Survivor', image: 'https://i.imgur.com/VOxDfI0.jpeg', url: 'https://store.steampowered.com/app/1907440/Super_Lone_Survivor/' },
-              { name: 'Noita', image: 'https://i.imgur.com/6su45Xe.jpeg', url: 'https://store.steampowered.com/app/881100/Noita/' },
-              { name: 'Lost Judgment', image: 'https://i.imgur.com/NxucDUK.jpeg', url: 'https://store.steampowered.com/app/2058190/Lost_Judgment/' },
-              { name: 'The Stanley Parable: Ultra Deluxe', image: 'https://i.imgur.com/TLLg9Mn.jpeg', url: 'https://store.steampowered.com/app/1703340/The_Stanley_Parable_Ultra_Deluxe/' },
-              { name: 'Pocket Crystal League', image: 'https://i.imgur.com/v5nVp0U.png', url: 'https://moodytail.itch.io/pocket-crystal-league' },
-              { name: 'Distance', image: 'https://i.imgur.com/Zu4BafQ.jpeg', url: 'https://store.steampowered.com/app/233610/Distance/' },
-              { name: 'Monster Sanctuary', image: 'https://i.imgur.com/ucEIsE7.jpeg', url: 'https://store.steampowered.com/app/814370/Monster_Sanctuary/' },
-              { name: 'Mirror\'s Edge', image: 'https://i.imgur.com/XcJa6u3.jpeg', url: 'https://store.steampowered.com/app/17410/Mirrors_Edge/' },
-              { name: 'Catherine Classic', image: 'https://i.imgur.com/CasuaTw.jpeg', url: 'https://store.steampowered.com/app/893180/Catherine_Classic/' },
-              { name: 'Keep Talking and Nobody Explodes', image: 'https://i.imgur.com/AjXllpx.jpeg', url: 'https://store.steampowered.com/app/341800/Keep_Talking_and_Nobody_Explodes/' },
-              { name: 'Potionomics', image: 'https://i.imgur.com/DVIH40F.jpeg', url: 'https://store.steampowered.com/app/1874490/Potionomics/' },
-              { name: 'Fatum Betula', image: 'https://i.imgur.com/jRoYzlL.jpeg', url: 'https://store.steampowered.com/app/1281270/Fatum_Betula/' },
-              { name: 'Caves of Qud', image: 'https://i.imgur.com/tnZukB0.jpeg', url: 'https://store.steampowered.com/app/333640/Caves_of_Qud/' },
-              { name: 'Polymute', image: 'https://i.imgur.com/pIlZnxA.gif', url: 'https://linker.itch.io/polymute' },
-              { name: 'Grindstone', image: 'https://i.imgur.com/c9cYpsW.jpeg', url: 'https://store.steampowered.com/app/1818690/Grindstone/' },
-              { name: 'Helltaker', image: 'https://i.imgur.com/2lq06Hb.jpeg', url: 'https://store.steampowered.com/app/1289310/Helltaker/' },
-              { name: 'Hades', image: 'https://i.imgur.com/nGaeN2j.jpeg', url: 'https://store.steampowered.com/app/1145360/Hades/' },
-              { name: 'A Short Hike', image: 'https://i.imgur.com/F9epg1b.gif', url: 'https://adamgryu.itch.io/a-short-hike' },
-              { name: 'Battle Chef Brigade Deluxe', image: 'https://i.imgur.com/rGA2Jd3.jpeg', url: 'https://store.steampowered.com/app/452570/Battle_Chef_Brigade_Deluxe/' },
-              { name: 'Warframe', image: 'https://i.imgur.com/we5l13S.jpeg', url: 'https://store.steampowered.com/app/230410/Warframe/' },
-              { name: 'My Familiar', image: 'https://i.imgur.com/MEOMRHA.jpg', url: 'https://store.steampowered.com/app/1502750/My_Familiar/' },
-              { name: 'SUPERHOT', image: 'https://i.imgur.com/OLMak5v.jpeg', url: 'https://store.steampowered.com/app/322500/SUPERHOT/' },
-              { name: 'Manifold Garden', image: 'https://i.imgur.com/0ym82An.jpeg', url: 'https://store.steampowered.com/app/473950/Manifold_Garden/' },
-              { name: 'Picayune Dreams', image: 'https://i.imgur.com/IubtQ5U.jpeg', url: 'https://store.steampowered.com/app/2088840/Picayune_Dreams/' },
-              { name: 'Inscryption', image: 'https://i.imgur.com/6ecDUCT.jpeg', url: 'https://store.steampowered.com/app/1092790/Inscryption/' },
-              { name: 'ZeroRanger', image: 'https://i.imgur.com/yqfjjpr.jpeg', url: 'https://store.steampowered.com/app/809020/ZeroRanger/' },
-              { name: 'Critter Crosser', image: 'https://i.imgur.com/TwHmHRS.jpeg', url: 'https://store.steampowered.com/app/2792320/Critter_Crosser/' },
-              { name: 'Return of the Obra Dinn', image: 'https://i.imgur.com/Q8Zbs3t.jpeg', url: 'https://store.steampowered.com/app/653530/Return_of_the_Obra_Dinn/' },
-              { name: 'Fear & Hunger 2: Termina', image: 'https://i.imgur.com/ljQyt54.jpeg', url: 'https://store.steampowered.com/app/2171440/Fear__Hunger_2_Termina/' },
-              { name: 'Jazzpunk', image: 'https://i.imgur.com/F1PxAxc.jpeg', url: 'https://store.steampowered.com/app/250260/Jazzpunk_Directors_Cut/' },
-              { name: 'Hotline Miami', image: 'https://i.imgur.com/401Xrdw.jpeg', url: 'https://store.steampowered.com/app/219150/Hotline_Miami/' },
-              { name: 'Monster Train', image: 'https://i.imgur.com/og4sQhj.jpeg', url: 'https://store.steampowered.com/app/1102190/Monster_Train/' },
-              { name: 'Starseed Pilgrim', image: 'https://i.imgur.com/ZJ3Eeh0.jpeg', url: 'https://store.steampowered.com/app/230980/Starseed_Pilgrim/' },
-              { name: 'R4: Ridge Racer Type-4', image: 'https://i.imgur.com/VpGBcBU.jpeg', url: '' },
-            ];
-                        
-            const entriesCount = document.querySelector('.entries-count');
-            entriesCount.textContent = `${GAMES.length} games`;
+         (async (document) => {
+             const rawGamesResponse = await fetch('https://raymperry.github.io/games-list/games.csv');
+             const gamesResponse = await rawGamesResponse.text();
+             const GAMES = gamesResponse.split('\n').slice(1);
 
-            const gamesContainer = document.querySelector('.games');
-            const allGames = document.createDocumentFragment();
-            
-            GAMES.forEach(({ name, image, url }, index) => {
-              const entryElem = document.createElement('div');
-              entryElem.classList.add('image', 'w-third', 'ba', 'bw1', 'b--near-black', 'bg-light-gray', 'usn');
-              if (index % 3 !== 2) entryElem.classList.add('mr2');
-              
-              const imageElem = document.createElement('img');
-              imageElem.alt = name;
-              imageElem.src = image;
-              entryElem.appendChild(imageElem);
+             const entriesCount = document.querySelector('.entries-count');
+             entriesCount.textContent = `${GAMES.length} games`;
 
-              const textElem = document.createElement('span');
-              textElem.textContent = name;
-              entryElem.appendChild(textElem);
+             const gamesContainer = document.querySelector('.games');
+             const allGames = document.createDocumentFragment();
 
-              if (url) {
-                entryElem.classList.add('dim', 'pointer');
+             GAMES.forEach((entry, index) => {
+                 const [_, name, image, url] = /"(.+)","(.+)","(.+)"/g.exec(entry) ?? [];
 
-                entryElem.addEventListener('click', () => {
-                  window.open(url, '_blank').focus();
-                });
-              } 
+                 if (!name) return;
 
-              if (index % 3) {
-                const rowElem = allGames.querySelector('.row:last-child');
-                rowElem.appendChild(entryElem);
-                allGames.appendChild(rowElem);
-              } else {
-                const rowElem = document.createElement('div');
-                rowElem.classList.add('row', 'mb2', 'flex');
-                rowElem.appendChild(entryElem);
-                allGames.appendChild(rowElem);
-              }
-            });
+                 const entryElem = document.createElement('div');
+                 entryElem.classList.add('image', 'w-third', 'ba', 'bw1', 'b--near-black', 'bg-light-gray', 'usn');
+                 if (index % 3 !== 2) entryElem.classList.add('mr2');
 
-            gamesContainer.appendChild(allGames);
+                 const imageElem = document.createElement('img');
+                 imageElem.alt = name;
+                 imageElem.src = image;
+                 entryElem.appendChild(imageElem);
+
+                 const textElem = document.createElement('span');
+                 textElem.textContent = name;
+                 entryElem.appendChild(textElem);
+
+                 if (url) {
+                     entryElem.classList.add('dim', 'pointer');
+
+                     entryElem.addEventListener('click', () => {
+                         window.open(url, '_blank').focus();
+                     });
+                 } 
+
+                 if (index % 3) {
+                     const rowElem = allGames.querySelector('.row:last-child');
+                     rowElem.appendChild(entryElem);
+                     allGames.appendChild(rowElem);
+                 } else {
+                     const rowElem = document.createElement('div');
+                     rowElem.classList.add('row', 'mb2', 'flex');
+                     rowElem.appendChild(entryElem);
+                     allGames.appendChild(rowElem);
+                 }
+             });
+
+             gamesContainer.appendChild(allGames);
+         })(document);
         </script>
     </body>
 </html>
