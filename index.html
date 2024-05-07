@@ -80,7 +80,7 @@
          (async (document) => {
              const rawGamesResponse = await fetch('https://raymperry.github.io/games-list/games.csv');
              const gamesResponse = await rawGamesResponse.text();
-             const GAMES = gamesResponse.split('\n').slice(1);
+             const GAMES = gamesResponse.trim().split('\n').slice(1);
 
              const entriesCount = document.querySelector('.entries-count');
              entriesCount.textContent = `${GAMES.length} games`;
@@ -89,8 +89,8 @@
              const allGames = document.createDocumentFragment();
 
              GAMES.forEach((entry, index) => {
-                 const [_, name, image, url] = /"(.+)","(.+)","(.+)"/g.exec(entry) ?? [];
-
+                 const [_, name, image, url] = /"(.+)","(.+)","(.*)"/g.exec(entry) ?? [];
+                 
                  if (!name) return;
 
                  const entryElem = document.createElement('div');
