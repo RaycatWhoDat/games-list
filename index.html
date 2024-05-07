@@ -77,7 +77,22 @@
         </div>
 
         <script>
-         (async (document) => {
+         (async (document, window) => {
+             let lazyImageObserver;
+             const isIntersectionObserverAvailable = 'IntersectionObserver' in window;
+
+             if (isIntersectionObserverAvailable) {
+                 lazyImageObserver = new IntersectionObserver((entries, observer) => {
+                     entries.forEach(entry => {
+                         if (!entry.isIntersecting) return;
+                         let lazyImage = entry.target;
+                         lazyImage.src = lazyImage.dataset.src;
+                         lazyImage.classList.remove('lazy');
+                         observer.unobserve(lazyImage);
+                     });
+                 }, { threshold: 0.01 });
+             }
+             
              const rawGamesResponse = await fetch('https://raymperry.github.io/games-list/games.csv');
              const gamesResponse = await rawGamesResponse.text();
              const GAMES = gamesResponse.trim().split('\n').slice(1);
@@ -99,9 +114,18 @@
 
                  const imageElem = document.createElement('img');
                  imageElem.alt = name;
-                 imageElem.src = image;
-                 entryElem.appendChild(imageElem);
 
+                 if (isIntersectionObserverAvailable) {
+                     imageElem.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII='
+                     imageElem.dataset.src = image;
+                     imageElem.classList.add('lazy');
+                     lazyImageObserver?.observe(imageElem);
+                 } else {
+                     imageElem.src = image;
+                 }
+
+                 entryElem.appendChild(imageElem);
+                 
                  const textElem = document.createElement('span');
                  textElem.textContent = name;
                  entryElem.appendChild(textElem);
@@ -127,7 +151,7 @@
              });
 
              gamesContainer.appendChild(allGames);
-         })(document);
+         })(document, window);
         </script>
     </body>
 </html>
