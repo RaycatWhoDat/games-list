@@ -66,8 +66,12 @@
             <p class="f4 i avenir">"Sometimes you see a game for a few seconds and you just know, man."</p>
         </div>
         
-        <div class="mb2 pv2 w-80 avenir lh-copy">
+        <div class="pv2 w-80 avenir lh-copy">
             <p><span class="b">[games]</span> is my response to the mountain of "Top X Y games" lists on the Internet. There's no ranking to these games. The only criterion for inclusion on this list is if the game catches my eye. Maybe one will catch yours?</p>
+        </div>
+
+        <div class="w-50 mb4 pa1 bg-near-black white avenir tc lh-solid">
+            <span class="sort added bg-white near-black pa2 usn pointer">sort by added</span> <span class="sort name-asc ml2 pa2 usn pointer">sort by name (ascending)</span>
         </div>
 
         <div class="games w-80 justify-center items-center"></div>
@@ -87,7 +91,7 @@
                          if (!entry.isIntersecting) return;
                          let lazyImage = entry.target;
                          lazyImage.src = lazyImage.dataset.src;
-                         lazyImage.classList.remove('lazy');
+                         localStorage.setItem(lazyImage.src, `${Date.now()}`);
                          observer.unobserve(lazyImage);
                      });
                  }, { threshold: 0.01 });
@@ -100,57 +104,90 @@
              const entriesCount = document.querySelector('.entries-count');
              entriesCount.textContent = `${GAMES.length} games`;
 
-             const gamesContainer = document.querySelector('.games');
-             const allGames = document.createDocumentFragment();
+             const rebuildList = listOfGames => {
+                 const gamesContainer = document.querySelector('.games');
+                 const allGames = document.createDocumentFragment();
 
-             GAMES.forEach((entry, index) => {
-                 const [_, name, image, url] = /"(.+)","(.+)","(.*)"/g.exec(entry) ?? [];
+                 const now = Date.now();
                  
-                 if (!name) return;
+                 listOfGames.forEach((entry, index) => {
+                     const [_, name, image, url] = /"(.+)","(.+)","(.*)"/g.exec(entry) ?? [];
+                     
+                     if (!name) return;
 
-                 const entryElem = document.createElement('div');
-                 entryElem.classList.add('image', 'w-third', 'ba', 'bw1', 'b--near-black', 'bg-light-gray', 'usn');
-                 if (index % 3 !== 2) entryElem.classList.add('mr2');
+                     const entryElem = document.createElement('div');
+                     entryElem.classList.add('image', 'w-third', 'ba', 'bw1', 'b--near-black', 'bg-light-gray', 'usn');
+                     if (index % 3 !== 2) entryElem.classList.add('mr2');
 
-                 const imageElem = document.createElement('img');
-                 imageElem.alt = name;
+                     const imageElem = document.createElement('img');
+                     imageElem.alt = name;
 
-                 if (isIntersectionObserverAvailable) {
-                     imageElem.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII='
-                     imageElem.dataset.src = image;
-                     imageElem.classList.add('lazy');
-                     lazyImageObserver?.observe(imageElem);
+                     if (isIntersectionObserverAvailable && (!localStorage.getItem(image) || (now - Number(localStorage.getItem(image)) > 1000 * 60 * 60 * 24))) {
+                         imageElem.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII='
+                         imageElem.dataset.src = image;
+                         lazyImageObserver?.observe(imageElem);
+                     } else {
+                         imageElem.src = image;
+                     }
+
+                     entryElem.appendChild(imageElem);
+                     
+                     const textElem = document.createElement('span');
+                     textElem.textContent = name;
+                     entryElem.appendChild(textElem);
+
+                     if (url) {
+                         entryElem.classList.add('dim', 'pointer');
+
+                         entryElem.addEventListener('click', () => {
+                             window.open(url, '_blank').focus();
+                         });
+                     } 
+
+                     if (index % 3) {
+                         const rowElem = allGames.querySelector('.row:last-child');
+                         rowElem.appendChild(entryElem);
+                         allGames.appendChild(rowElem);
+                     } else {
+                         const rowElem = document.createElement('div');
+                         rowElem.classList.add('row', 'mb2', 'flex');
+                         rowElem.appendChild(entryElem);
+                         allGames.appendChild(rowElem);
+                     }
+                 });
+
+                 if (gamesContainer.childElementCount === 0) {
+                     gamesContainer.appendChild(allGames);
                  } else {
-                     imageElem.src = image;
+                     gamesContainer.replaceChildren(allGames);
                  }
+             };
 
-                 entryElem.appendChild(imageElem);
+             rebuildList(GAMES);
+
+             const sortGames = event => {
+                 if (event.target.classList.contains('bg-white')) return;
                  
-                 const textElem = document.createElement('span');
-                 textElem.textContent = name;
-                 entryElem.appendChild(textElem);
+                 const allSortElems = document.querySelectorAll('.sort');
+                 allSortElems.forEach(elem => {
+                     elem.classList.remove('bg-white', 'near-black');
+                 });
+                 event.target.classList.add('bg-white', 'near-black');
 
-                 if (url) {
-                     entryElem.classList.add('dim', 'pointer');
+                 let listOfGames = GAMES;
 
-                     entryElem.addEventListener('click', () => {
-                         window.open(url, '_blank').focus();
-                     });
-                 } 
-
-                 if (index % 3) {
-                     const rowElem = allGames.querySelector('.row:last-child');
-                     rowElem.appendChild(entryElem);
-                     allGames.appendChild(rowElem);
+                 if (event.target.classList.contains('name-asc')) {
+                     rebuildList(listOfGames.toSorted((a, b) => a.charCodeAt(1) - b.charCodeAt(1)));
                  } else {
-                     const rowElem = document.createElement('div');
-                     rowElem.classList.add('row', 'mb2', 'flex');
-                     rowElem.appendChild(entryElem);
-                     allGames.appendChild(rowElem);
+                     rebuildList(listOfGames);
                  }
-             });
+             };
+             
+             const sortByAddedElem = document.querySelector('.sort.added');
+             sortByAddedElem.addEventListener('click', sortGames);
+             const sortByNameAscElem = document.querySelector('.sort.name-asc');
+             sortByNameAscElem.addEventListener('click', sortGames);
 
-             gamesContainer.appendChild(allGames);
          })(document, window);
         </script>
     </body>
