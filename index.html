@@ -99,9 +99,18 @@
              
              const rawGamesResponse = await fetch('https://raymperry.github.io/games-list/games.csv');
              const gamesResponse = await rawGamesResponse.text();
+
              const GAMES = gamesResponse.trim().split('\n').slice(1);
-             const GAMES_NAME_ASC = GAMES.toSorted((a, b) => a.charAt(1).toLowerCase().localeCompare(b.charAt(1).toLowerCase()));
-             const GAMES_NAME_DESC = GAMES.toSorted((a, b) => b.charAt(1).toLowerCase().localeCompare(a.charAt(1).toLowerCase()));
+             const GAMES_NAME_ASC = GAMES.toSorted((game1, game2) => {
+                 const name1 = /^"(.+)",/.exec(game1)[1];
+                 const name2 = /^"(.+)",/.exec(game2)[1];
+                 return name1.toLowerCase().localeCompare(name2.toLowerCase())
+             });
+             const GAMES_NAME_DESC = GAMES.toSorted((game1, game2) => {
+                 const name1 = /^"(.+)",/.exec(game1)[1];
+                 const name2 = /^"(.+)",/.exec(game2)[1];
+                 return name2.toLowerCase().localeCompare(name1.toLowerCase())
+             });
 
              const entriesCount = document.querySelector('.entries-count');
              entriesCount.textContent = `${GAMES.length} games`;
