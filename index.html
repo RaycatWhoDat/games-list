@@ -71,7 +71,7 @@
         </div>
 
         <div class="w-50 mb4 pa1 bg-near-black white avenir tc lh-solid">
-            <span class="sort added bg-white near-black pa2 usn pointer">sort by added</span> <span class="sort name-asc ml2 pa2 usn pointer">sort by name (ascending)</span>
+            <span class="sort added bg-white near-black pa2 usn pointer">sort by added</span> <span class="sort name-asc ml2 pa2 usn pointer">sort by name (ascending)</span> <span class="sort name-desc ml2 pa2 usn pointer">sort by name (descending)</span>
         </div>
 
         <div class="games w-80 justify-center items-center"></div>
@@ -100,6 +100,8 @@
              const rawGamesResponse = await fetch('https://raymperry.github.io/games-list/games.csv');
              const gamesResponse = await rawGamesResponse.text();
              const GAMES = gamesResponse.trim().split('\n').slice(1);
+             const GAMES_NAME_ASC = GAMES.toSorted((a, b) => a.charAt(1).toLowerCase().localeCompare(b.charAt(1).toLowerCase()));
+             const GAMES_NAME_DESC = GAMES.toSorted((a, b) => b.charAt(1).toLowerCase().localeCompare(a.charAt(1).toLowerCase()));
 
              const entriesCount = document.querySelector('.entries-count');
              entriesCount.textContent = `${GAMES.length} games`;
@@ -174,20 +176,17 @@
                  });
                  event.target.classList.add('bg-white', 'near-black');
 
-                 let listOfGames = GAMES;
-
                  if (event.target.classList.contains('name-asc')) {
-                     rebuildList(listOfGames.toSorted((a, b) => a.charCodeAt(1) - b.charCodeAt(1)));
+                     rebuildList(GAMES_NAME_ASC);
+                 } else if (event.target.classList.contains('name-desc')) {
+                     rebuildList(GAMES_NAME_DESC);
                  } else {
-                     rebuildList(listOfGames);
+                     rebuildList(GAMES);
                  }
              };
              
-             const sortByAddedElem = document.querySelector('.sort.added');
-             sortByAddedElem.addEventListener('click', sortGames);
-             const sortByNameAscElem = document.querySelector('.sort.name-asc');
-             sortByNameAscElem.addEventListener('click', sortGames);
-
+             const sortButtons = document.querySelectorAll('.sort');
+             sortButtons.forEach(elem => elem.addEventListener('click', sortGames));
          })(document, window);
         </script>
     </body>
