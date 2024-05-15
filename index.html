@@ -97,7 +97,7 @@
                  }, { threshold: 0.01 });
              }
              
-             const rawGamesResponse = await fetch('https://raymperry.github.io/games-list/games.csv');
+             const rawGamesResponse = await fetch('/games.csv');
              const gamesResponse = await rawGamesResponse.text();
 
              const GAMES = gamesResponse.trim().split('\n').slice(1);
