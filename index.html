@@ -47,10 +47,17 @@
                 height: 100%;
                 object-fit: cover;
             }
+
+         .games {
+             display: grid;
+             grid-template-columns: repeat(3, 1fr);
+             gap: 10px;
+             justify-items: stretch;
+         }
         </style>
     </head>
     <body class="flex flex-column justify-center items-center mb5">
-        <div class="mt4 mb2 pv1 w-80">
+        <div class="mt4 pv1 w-80">
             <div class="rozha-one-regular measure f-headline tl">
                 <p class="mh0 mv3">[games]</p>
             </div>
@@ -62,11 +69,11 @@
             </div>
         </div>
 
-        <div class="pv2 w-80 avenir lh-copy tc">
-            <p><span class="b">[games]</span> is my response to the mountain of "Top X Y games" lists on the Internet. There's no ranking to these games. The only criterion for inclusion on this list is if the game catches my eye. Maybe one will catch yours?</p>
+        <div class="games w-80 mt4">
+            <div class="avenir lh-copy ph4 pv2 bg-light-gray tc flex-column justify-center items-center i">
+                <p><span class="b">[games]</span> is my response to the mountain of "Top X Y games" lists on the Internet. There's no ranking to these games; the only criterion for inclusion is a question: "Does the game catch my eye?" <br /><br /> Maybe you'll find one that catches yours.</p>
+            </div>
         </div>
-
-        <div class="games w-80 justify-center items-center"></div>
         
         <div class="mv4 pv2 w-80 bg-near-black near-white tc">
             <p class="f4 i avernir">"As a <a class="link pointer usn white dim" href="https://twitch.tv/DNOpls">wise man</a> once said... 'so many game, no many time'."</p>
@@ -74,6 +81,8 @@
 
         <script>
          (async (document, window) => {
+             const PLACEHOLDER_IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=';
+             
              let lazyImageObserver;
              const isIntersectionObserverAvailable = 'IntersectionObserver' in window;
 
@@ -89,8 +98,13 @@
                  }, { threshold: 0.01 });
              }
              
-             const rawGamesResponse = await fetch('/games.csv');
-             const gamesResponse = await rawGamesResponse.text();
+             let rawGamesResponse, gamesResponse;
+             try {
+                 rawGamesResponse = await fetch('/games.csv');
+                 gamesResponse = await rawGamesResponse.text();
+             } catch {
+                 gamesResponse = `"Placeholder Game","${PLACEHOLDER_IMAGE}","/"\n`.repeat(6);
+             }
 
              const GAMES = gamesResponse.trim().split('\n').slice(1);
              const GAMES_NAME_ASC = GAMES.toSorted((game1, game2) => {
@@ -119,14 +133,13 @@
                      if (!name) return;
 
                      const entryElem = document.createElement('div');
-                     entryElem.classList.add('image', 'w-third', 'ba', 'bw1', 'b--near-black', 'bg-light-gray', 'usn');
-                     if (index % 3 !== 2) entryElem.classList.add('mr2');
+                     entryElem.classList.add('image', 'ba', 'bw1', 'b--near-black', 'bg-light-gray', 'usn');
 
                      const imageElem = document.createElement('img');
                      imageElem.alt = name;
 
                      if (isIntersectionObserverAvailable && (!localStorage.getItem(image) || (now - Number(localStorage.getItem(image)) > 1000 * 60 * 60 * 24))) {
-                         imageElem.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII='
+                         imageElem.src = PLACEHOLDER_IMAGE;
                          imageElem.dataset.src = image;
                          lazyImageObserver?.observe(imageElem);
                      } else {
@@ -147,23 +160,10 @@
                          });
                      } 
 
-                     if (index % 3) {
-                         const rowElem = allGames.querySelector('.row:last-child');
-                         rowElem.appendChild(entryElem);
-                         allGames.appendChild(rowElem);
-                     } else {
-                         const rowElem = document.createElement('div');
-                         rowElem.classList.add('row', 'mb2', 'flex');
-                         rowElem.appendChild(entryElem);
-                         allGames.appendChild(rowElem);
-                     }
+                     allGames.appendChild(entryElem);
                  });
 
-                 if (gamesContainer.childElementCount === 0) {
-                     gamesContainer.appendChild(allGames);
-                 } else {
-                     gamesContainer.replaceChildren(allGames);
-                 }
+                 gamesContainer.appendChild(allGames);
              };
 
              rebuildList(GAMES);
