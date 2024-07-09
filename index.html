@@ -59,7 +59,7 @@
 
          .image img {
              width: 100%;
-             height: 100%;
+             height: 70%;
              object-fit: cover;
          }
 
@@ -107,7 +107,7 @@
         <script>
          (async (document, window) => {
              const PLACEHOLDER_IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=';
-             const ITEM_HEIGHT = '300px';
+             const ITEM_HEIGHT = '350px';
              
              let lazyImageObserver;
              const isIntersectionObserverAvailable = 'IntersectionObserver' in window;
@@ -192,6 +192,7 @@
 
                      const blurbElem = document.createElement('span');
                      blurbElem.classList.add('game-blurb');
+                     console.log(blurb, blurb?.length);
                      blurbElem.textContent = blurb ?? '(no comment)';
                      entryElem.appendChild(blurbElem);
                      
