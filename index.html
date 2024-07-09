@@ -32,13 +32,29 @@
          
          .image span {
              position: absolute;
+             width: 100%;
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             text-align: center;
              right: 0;
-             bottom: 0;
-             background-color: white;
              text-decoration: none;
              outline: none;
+         }
+
+         .image span.game-name {
+             bottom: calc(3em + 8px);
+             background-color: white;
              color: black;
-             padding: 6px 12px;
+             padding: 8px 0;
+         }
+
+         .image span.game-blurb {
+             padding: 10px 0;
+             height: 2.25em;
+             bottom: 0;
+             background-color: black;
+             color: white;
          }
 
          .image img {
@@ -91,7 +107,7 @@
         <script>
          (async (document, window) => {
              const PLACEHOLDER_IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=';
-             const ITEM_HEIGHT = '200px';
+             const ITEM_HEIGHT = '300px';
              
              let lazyImageObserver;
              const isIntersectionObserverAvailable = 'IntersectionObserver' in window;
@@ -148,7 +164,7 @@
                  allGames.appendChild(preambleElem);
                  
                  listOfGames.forEach((entry, index) => {
-                     const [_, name, image, url] = /"(.+)","(.+)","(.*)"/g.exec(entry) ?? [];
+                     const [_, name, image, url, blurb] = /"(.+)","(.+)","(.*)","(.*)"/g.exec(entry) ?? [];
                      
                      if (!name) return;
 
@@ -170,9 +186,15 @@
                      entryElem.appendChild(imageElem);
                      
                      const textElem = document.createElement('span');
+                     textElem.classList.add('game-name');
                      textElem.textContent = name;
                      entryElem.appendChild(textElem);
 
+                     const blurbElem = document.createElement('span');
+                     blurbElem.classList.add('game-blurb');
+                     blurbElem.textContent = blurb ?? '(no comment)';
+                     entryElem.appendChild(blurbElem);
+                     
                      if (url) {
                          entryElem.classList.add('dim', 'pointer');
 
