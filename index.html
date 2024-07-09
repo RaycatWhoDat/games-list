@@ -49,7 +49,7 @@
              padding: 8px 0;
          }
          
-         .image span.game-blurb + span.game-name {
+         .image span.game-name:has(+ span.game-blurb) {
              bottom: calc(3em + 8px);
          }
 
@@ -67,7 +67,7 @@
              object-fit: cover;
          }
 
-         .image span.game-blurb + span.game-name + img {
+         .image img:has(+ span.game-name + span.game-blurb) {
              height: 80%;
          }
          
@@ -137,7 +137,9 @@
                  rawGamesResponse = await fetch('/games.csv');
                  gamesResponse = await rawGamesResponse.text();
              } catch {
-                 gamesResponse = `"Placeholder Game","${PLACEHOLDER_IMAGE}","/",""\n`.repeat(6);
+                 for (let i = 0; i < 6; i++) {
+                     gamesResponse += `"Placeholder Game","${PLACEHOLDER_IMAGE}","/","${Math.random() > 0.5 ? 'blurb' : ''}"\n`;
+                 }
              }
 
              const GAMES = gamesResponse.trim().split('\n').slice(1);
@@ -203,8 +205,6 @@
                          blurbElem.classList.add('game-blurb');
                          blurbElem.textContent = blurb;
                          entryElem.appendChild(blurbElem);
-                     } else {
-                         
                      }
                      
                      if (url) {
