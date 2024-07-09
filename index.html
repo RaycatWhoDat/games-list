@@ -43,10 +43,14 @@
          }
 
          .image span.game-name {
-             bottom: calc(3em + 8px);
+             bottom: 0;
              background-color: white;
              color: black;
              padding: 8px 0;
+         }
+         
+         .image span.game-blurb + span.game-name {
+             bottom: calc(3em + 8px);
          }
 
          .image span.game-blurb {
@@ -59,17 +63,21 @@
 
          .image img {
              width: 100%;
-             height: 80%;
+             height: 100%;
              object-fit: cover;
          }
 
+         .image span.game-blurb + span.game-name + img {
+             height: 80%;
+         }
+         
          .games {
              display: grid;
              grid-template-columns: repeat(3, 1fr);
              gap: 10px;
              justify-items: stretch;
          }
-
+         
          @media (width < 1100px) {
              .logo {
                  text-align: center;
@@ -78,7 +86,7 @@
              .top-bar {
                  flex-direction: column;
              }
-
+             
              .sort-bar {
                  margin-top: 5px;
              }
@@ -129,7 +137,7 @@
                  rawGamesResponse = await fetch('/games.csv');
                  gamesResponse = await rawGamesResponse.text();
              } catch {
-                 gamesResponse = `"Placeholder Game","${PLACEHOLDER_IMAGE}","/"\n`.repeat(6);
+                 gamesResponse = `"Placeholder Game","${PLACEHOLDER_IMAGE}","/",""\n`.repeat(6);
              }
 
              const GAMES = gamesResponse.trim().split('\n').slice(1);
@@ -190,10 +198,14 @@
                      textElem.textContent = name;
                      entryElem.appendChild(textElem);
 
-                     const blurbElem = document.createElement('span');
-                     blurbElem.classList.add('game-blurb');
-                     blurbElem.textContent = blurb?.length > 0 ? blurb : '(no comment)';
-                     entryElem.appendChild(blurbElem);
+                     if (blurb?.length > 0) {
+                         const blurbElem = document.createElement('span');
+                         blurbElem.classList.add('game-blurb');
+                         blurbElem.textContent = blurb;
+                         entryElem.appendChild(blurbElem);
+                     } else {
+                         
+                     }
                      
                      if (url) {
                          entryElem.classList.add('dim', 'pointer');
