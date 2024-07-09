@@ -192,7 +192,7 @@
 
                      const blurbElem = document.createElement('span');
                      blurbElem.classList.add('game-blurb');
-                     blurbElem.textContent = blurb?.length < 1 ? blurb : '(no comment)';
+                     blurbElem.textContent = blurb?.length > 0 ? blurb : '(no comment)';
                      entryElem.appendChild(blurbElem);
                      
                      if (url) {
