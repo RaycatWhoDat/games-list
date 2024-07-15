@@ -182,10 +182,18 @@
                  allGames.appendChild(preambleElem);
                  
                  listOfGames.forEach((entry, index) => {
-                     const [_, name, image, url, blurb] = /"(.+)","(.+)","(.*)","(.*)"/g.exec(entry) ?? [];
+                     const [_, name, rawImage, url, blurb] = /"(.+)","(.+)","(.*)","(.*)"/g.exec(entry) ?? [];
                      
                      if (!name) return;
 
+                     let image = rawImage;
+                     if (rawImage.startsWith('[img]')) {
+                       const startTag = '[img]';
+                       const endTag = '[/img]';
+
+                       image = rawImage.substring(startTag.length, rawImage.length - endTag.length);
+                     }
+                   
                      const entryElem = document.createElement('div');
                      entryElem.classList.add('image', 'ba', 'bw1', 'b--near-black', 'bg-light-gray', 'usn');
                      entryElem.style.height = ITEM_HEIGHT;
