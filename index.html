@@ -156,11 +156,7 @@
                  const name2 = /^"(.+)",/.exec(game2)[1];
                  return name1.toLowerCase().localeCompare(name2.toLowerCase())
              });
-             const GAMES_NAME_DESC = GAMES.toSorted((game1, game2) => {
-                 const name1 = /^"(.+)",/.exec(game1)[1];
-                 const name2 = /^"(.+)",/.exec(game2)[1];
-                 return name2.toLowerCase().localeCompare(name1.toLowerCase())
-             });
+             const GAMES_NAME_DESC = GAMES_NAME_ASC.toReversed();
 
              const entriesCount = document.querySelector('.entries-count');
              entriesCount.textContent = `${GAMES.length} games`;
@@ -186,13 +182,7 @@
                      
                      if (!name) return;
 
-                     let image = rawImage;
-                     if (rawImage.startsWith('[img]')) {
-                       const startTag = '[img]';
-                       const endTag = '[/img]';
-
-                       image = rawImage.substring(startTag.length, rawImage.length - endTag.length);
-                     }
+                     let image = rawImage.startsWith('[img]') ? rawImage.substring(5, rawImage.length - 6) : rawImage;
                    
                      const entryElem = document.createElement('div');
                      entryElem.classList.add('image', 'ba', 'bw1', 'b--near-black', 'bg-light-gray', 'usn');
