@@ -219,7 +219,7 @@
                      if (blurb?.length > 0) {
                          const blurbElem = document.createElement('span');
                          blurbElem.classList.add('game-blurb');
-                         blurbElem.textContent = blurb;
+                         blurbElem.textContent = blurb.replaceAll(`&quot;`, `"`);
                          entryElem.appendChild(blurbElem);
                      }
                      
