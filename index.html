@@ -146,14 +146,14 @@
              }
              
              let rawGamesResponse, gamesResponse;
-             /* try {
+             try {
                  rawGamesResponse = await fetch('/games.csv');
                  gamesResponse = await rawGamesResponse.text();
-             } catch { */
+             } catch {
                  for (let i = 0; i < 6; i++) {
                      gamesResponse += `"Placeholder Game","${PLACEHOLDER_IMAGE}","/","${Math.random() > 0.5 ? 'blurb' : ''}"\n`;
                  }
-//             }
+             }
 
              const GAMES = gamesResponse.trim().split('\n').slice(1);
              const GAMES_NAME_ASC = GAMES.toSorted((game1, game2) => {
