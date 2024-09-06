@@ -6,7 +6,7 @@ const path = require('path');
 const numberOfEntries = 15;
 
 console.log('Reading games.csv...');
-const rawCsvFile = fs.readFileSync(path.resolve(__dirname, 'games.csv'), 'utf-8').split('\n') ?? [];
+const rawCsvFile = fs.readFileSync(path.resolve(__dirname, 'public/games.csv'), 'utf-8').split('\n') ?? [];
 let currentGameNumber = rawCsvFile.length - 2;
 const entries = rawCsvFile.slice(1, numberOfEntries + 1);
 
@@ -48,5 +48,5 @@ const rssFeed = [
 ].join('\n');
 
 console.log('Writing RSS feed to file...');
-fs.writeFileSync(path.resolve(__dirname, 'feed.xml'), rssFeed);
+fs.writeFileSync(path.resolve(__dirname, 'public/feed.xml'), rssFeed);
 console.log('Done.');
