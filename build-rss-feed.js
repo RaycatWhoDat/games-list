@@ -35,7 +35,7 @@ for (const entry of entries) {
   rssFeedItems.push(`    <item>`);
   rssFeedItems.push(`      <title>#${currentGameNumber}: ${name}</title>`);
   rssFeedItems.push(`      <link>${url}</link>`);
-  rssFeedItems.push(`      <description>${image}</description>`);
+  rssFeedItems.push(`      <description><![CDATA[<img src="${image}"/>]]></description>`);
   rssFeedItems.push(`    </item>`);
   currentGameNumber--;
 }
