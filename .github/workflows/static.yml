@@ -28,6 +28,8 @@ jobs:
           node-version: '20.x'
       - name: Build RSS feed
         run: node build-rss-feed.js
+      - name: Set build date
+        run: node set-build-date.js
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
