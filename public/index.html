@@ -259,15 +259,16 @@
             const sortGames = event => {
                 if (event.target.classList.contains('bg-white')) return;
 
+                const allSortElems = document.querySelectorAll('.sort');
+                allSortElems.forEach(elem => {
+                    elem.classList.remove('bg-white', 'near-black');
+                });
+
                 if (event.target.classList.contains('shuffle')) {
                     rebuildList(shuffle(GAMES));
                     return;
                 }
 
-                const allSortElems = document.querySelectorAll('.sort');
-                allSortElems.forEach(elem => {
-                    elem.classList.remove('bg-white', 'near-black');
-                });
                 event.target.classList.add('bg-white', 'near-black');
 
                 if (event.target.classList.contains('name-asc')) {
