@@ -173,6 +173,7 @@
             }
 
             const GAMES = gamesResponse.trim().split('\n').slice(1);
+            const GAMES_RANDOMIZED = [...GAMES];
 
             const GAMES_NAME_ASC = GAMES.toSorted((game1, game2) => {
                 const name1 = /^"(.+)",/.exec(game1)[1];
@@ -265,7 +266,7 @@
                 });
 
                 if (event.target.classList.contains('shuffle')) {
-                    rebuildList(shuffle(GAMES));
+                    rebuildList(shuffle(GAMES_RANDOMIZED));
                     return;
                 }
 
