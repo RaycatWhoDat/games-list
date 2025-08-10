@@ -1,264 +1,288 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8"/>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link href="https://fonts.googleapis.com/css2?family=Rozha+One&display=swap" rel="stylesheet" />
-        <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css"/>
 
-        <link rel="icon" type="image/png" sizes="32x32" href="https://i.imgur.com/n8SrLzG.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="https://i.imgur.com/lG8hWO7.png">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Rozha+One&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css" />
 
-        <title>[games]</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="https://i.imgur.com/n8SrLzG.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://i.imgur.com/lG8hWO7.png">
 
-        <style>
-         .rozha-one-regular {
-             font-family: "Rozha One", serif;
-             font-weight: 400;
-             font-style: normal;
-         }
-         
-         .image {
-             position: relative;
-             overflow: hidden;
-             text-align: right;
-             z-index: 1;
-         }
+    <title>[games]</title>
 
-         .image:hover {
-             z-index: 2;
-         }
-         
-         .image span {
-             position: absolute;
-             width: 100%;
-             display: flex;
-             justify-content: center;
-             align-items: center;
-             text-align: center;
-             right: 0;
-             text-decoration: none;
-             outline: none;
-         }
+    <style>
+        .rozha-one-regular {
+            font-family: "Rozha One", serif;
+            font-weight: 400;
+            font-style: normal;
+        }
 
-         .image span.game-name {
-             bottom: 0;
-             background-color: white;
-             color: black;
-             padding: 8px 0;
-         }
-         
-         .image span.game-name:has(+ span.game-blurb) {
-             bottom: calc(3em + 8px);
-         }
+        .image {
+            position: relative;
+            overflow: hidden;
+            text-align: right;
+            z-index: 1;
+        }
 
-         .image span.game-blurb {
-             padding: 10px 0;
-             height: 2.25em;
-             bottom: 0;
-             background-color: black;
-             color: white;
-         }
+        .image:hover {
+            z-index: 2;
+        }
 
-         .image img {
-             width: 100%;
-             height: 100%;
-             object-fit: cover;
-         }
+        .image span {
+            position: absolute;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            right: 0;
+            text-decoration: none;
+            outline: none;
+        }
 
-         .image img:has(+ span.game-name + span.game-blurb) {
-             height: 80%;
-         }
-         
-         .games {
-             display: grid;
-             grid-template-columns: repeat(3, 1fr);
-             gap: 10px;
-             justify-items: stretch;
-         }
-         
-         @media (width < 1100px) {
-             .logo {
-                 text-align: center;
-             }
-             
-             .top-bar {
-                 flex-direction: column;
-             }
-             
-             .sort-bar {
-                 margin-top: 5px;
-             }
+        .image span.game-name {
+            bottom: 0;
+            background-color: white;
+            color: black;
+            padding: 8px 0;
+        }
 
-             .games {
-                 grid-template-columns: 1fr;
-             }
+        .image span.game-name:has(+ span.game-blurb) {
+            bottom: calc(3em + 8px);
+        }
 
-             .games div:first-child {
-                 display: none;
-             }
-         }
-        </style>
-    </head>
-    <body class="flex flex-column justify-center items-center mb5">
-        <div class="mt4 pv1 w-80">
-            <div class="logo rozha-one-regular measure f-headline">
-                <p class="mh0 mv3">[games]</p>
-            </div>
-            <div class="top-bar f5 bg-near-black white tc avenir flex justify-between">
-                <p class="ma0 ml2 pv1 nowrap"><span class="entries-count"></span> selected by <a class="link pointer usn light-blue dim" href="https://raycatwhodat.newgrounds.com">RaycatWhoDat</a> as of <span class="last-updated">{{LAST_BUILD_DATE}}</span></span></p>
-                <div class="sort-bar w-fit ma0 mr2 pa0 pv1 bg-near-black white avenir tc lh-solid nowrap">
-                    <span class="sort added bg-white near-black pa2 usn pointer">sort by added</span>
-                    <span class="sort name-asc ml2 pa2 usn pointer">sort by name (ascending)</span>
-                    <span class="sort name-desc ml2 pa2 usn pointer">sort by name (descending)</span>
-                    <a class="link white" href="/feed.xml">
-                        <span class="ml2 pv1 ph3 usn pointer orange b">rss</span>
-                    </a>
-                </div>
+        .image span.game-blurb {
+            padding: 10px 0;
+            height: 2.25em;
+            bottom: 0;
+            background-color: black;
+            color: white;
+        }
+
+        .image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image img:has(+ span.game-name + span.game-blurb) {
+            height: 80%;
+        }
+
+        .games {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            justify-items: stretch;
+        }
+
+        @media (width < 1100px) {
+            .logo {
+                text-align: center;
+            }
+
+            .top-bar {
+                flex-direction: column;
+            }
+
+            .sort-bar {
+                margin-top: 5px;
+            }
+
+            .games {
+                grid-template-columns: 1fr;
+            }
+
+            .games div:first-child {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="flex flex-column justify-center items-center mb5">
+    <div class="mt4 pv1 w-80">
+        <div class="logo rozha-one-regular measure f-headline">
+            <p class="mh0 mv3">[games]</p>
+        </div>
+        <div class="top-bar f5 bg-near-black white tc avenir flex justify-between">
+            <p class="ma0 ml2 pv1 nowrap"><span class="entries-count"></span> selected by <a
+                    class="link pointer usn light-blue dim" href="https://raycatwhodat.newgrounds.com">RaycatWhoDat</a>
+                as of <span class="last-updated">{{LAST_BUILD_DATE}}</span></span></p>
+            <div class="sort-bar w-fit ma0 mr2 pa0 pv1 bg-near-black white avenir tc lh-solid nowrap">
+                <span class="sort shuffle pa2 v-mid usn pointer">🎲</span>
+                <span class="sort added bg-white near-black ml2 pa2 usn pointer">sort by added</span>
+                <span class="sort name-asc ml2 pa2 usn pointer">sort by name (ascending)</span>
+                <span class="sort name-desc ml2 pa2 usn pointer">sort by name (descending)</span>
+                <a class="link white" href="/feed.xml">
+                    <span class="ml2 pv1 ph3 usn pointer orange b">rss</span>
+                </a>
             </div>
         </div>
+    </div>
 
-        <div class="games w-80 mt4"></div>
-        
-        <div class="mv4 pv2 w-80 bg-near-black near-white tc">
-            <p class="f4 i avernir">"As a <a class="link pointer usn white dim" href="https://twitch.tv/DNOpls">wise man</a> once said... 'so many game, no many time'."</p>
-        </div>
+    <div class="games w-80 mt4"></div>
 
-        <script>
-         (async (document, window) => {
-             const PLACEHOLDER_IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=';
-             const ITEM_HEIGHT = '350px';
-             
-             let lazyImageObserver;
-             const isIntersectionObserverAvailable = 'IntersectionObserver' in window;
+    <div class="mv4 pv2 w-80 bg-near-black near-white tc">
+        <p class="f4 i avernir">"As a <a class="link pointer usn white dim" href="https://twitch.tv/DNOpls">wise man</a>
+            once said... 'so many game, no many time'."</p>
+    </div>
 
-             if (isIntersectionObserverAvailable) {
-                 lazyImageObserver = new IntersectionObserver((entries, observer) => {
-                     entries.forEach(entry => {
-                         if (!entry.isIntersecting) return;
-                         let lazyImage = entry.target;
-                         lazyImage.src = lazyImage.dataset.src;
-                         localStorage.setItem(lazyImage.src, `${Date.now()}`);
-                         observer.unobserve(lazyImage);
-                     });
-                 }, { threshold: 0.01 });
-             }
-             
-             let rawGamesResponse, gamesResponse;
-             try {
-                 rawGamesResponse = await fetch('/games.csv');
-                 gamesResponse = await rawGamesResponse.text();
-             } catch {
-                 for (let i = 0; i < 6; i++) {
-                     gamesResponse += `"Placeholder Game","${PLACEHOLDER_IMAGE}","/","${Math.random() > 0.5 ? 'blurb' : ''}"\n`;
-                 }
-             }
+    <script>
+        (async (document, window) => {
+            // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+            const shuffle = arr => {
+                for (let i = arr.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                }
+                return arr;
+            };
 
-             const GAMES = gamesResponse.trim().split('\n').slice(1);
-             const GAMES_NAME_ASC = GAMES.toSorted((game1, game2) => {
-                 const name1 = /^"(.+)",/.exec(game1)[1];
-                 const name2 = /^"(.+)",/.exec(game2)[1];
-                 return name1.toLowerCase().localeCompare(name2.toLowerCase())
-             });
-             const GAMES_NAME_DESC = GAMES_NAME_ASC.toReversed();
+            ///////////////////////////////////////////////////////////////////////
 
-             const entriesCount = document.querySelector('.entries-count');
-             entriesCount.textContent = `${GAMES.length} games`;
+            const PLACEHOLDER_IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=';
+            const ITEM_HEIGHT = '350px';
 
-             const rebuildList = listOfGames => {
-                 const gamesContainer = document.querySelector('.games');
-                 const allGames = document.createDocumentFragment();
+            let lazyImageObserver;
+            const isIntersectionObserverAvailable = 'IntersectionObserver' in window;
 
-                 const now = Date.now();
-                 
-                 const preambleElem = document.createElement('div');
-                 preambleElem.classList.add('avenir', 'lh-copy', 'ph4', 'pv2', 'bg-light-gray', 'tc', 'flex', 'justify-center', 'items-center', 'i');
-                 preambleElem.style.height = ITEM_HEIGHT;
+            if (isIntersectionObserverAvailable) {
+                lazyImageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (!entry.isIntersecting) return;
+                        let lazyImage = entry.target;
+                        lazyImage.src = lazyImage.dataset.src;
+                        localStorage.setItem(lazyImage.src, `${Date.now()}`);
+                        observer.unobserve(lazyImage);
+                    });
+                }, { threshold: 0.01 });
+            }
 
-                 const preambleTextElem = document.createElement('p');
-                 preambleTextElem.textContent = `"Sometimes, you look at a game for a few seconds and you just know, man."`;
+            let rawGamesResponse, gamesResponse;
+            try {
+                rawGamesResponse = await fetch('/games.csv');
+                gamesResponse = await rawGamesResponse.text();
+            } catch {
+                for (let i = 0; i < 6; i++) {
+                    gamesResponse += `"Placeholder Game","${PLACEHOLDER_IMAGE}","/","${Math.random() > 0.5 ? 'blurb' : ''}"\n`;
+                }
+            }
 
-                 preambleElem.appendChild(preambleTextElem);
-                 allGames.appendChild(preambleElem);
-                 
-                 listOfGames.forEach((entry, index) => {
-                     const [_, name, rawImage, url, blurb] = /"(.+)","(.+)","(.*)","(.*)"/g.exec(entry) ?? [];
-                     
-                     if (!name) return;
+            const GAMES = gamesResponse.trim().split('\n').slice(1);
 
-                     let image = rawImage.startsWith('[img]') ? rawImage.substring(5, rawImage.length - 6) : rawImage;
-                   
-                     const entryElem = document.createElement('div');
-                     entryElem.classList.add('image', 'ba', 'bw1', 'b--near-black', 'bg-light-gray', 'usn');
-                     entryElem.style.height = ITEM_HEIGHT;
+            const GAMES_NAME_ASC = GAMES.toSorted((game1, game2) => {
+                const name1 = /^"(.+)",/.exec(game1)[1];
+                const name2 = /^"(.+)",/.exec(game2)[1];
+                return name1.toLowerCase().localeCompare(name2.toLowerCase())
+            });
+            const GAMES_NAME_DESC = GAMES_NAME_ASC.toReversed();
 
-                     const imageElem = document.createElement('img');
-                     imageElem.alt = name;
+            const entriesCount = document.querySelector('.entries-count');
+            entriesCount.textContent = `${GAMES.length} games`;
 
-                     if (isIntersectionObserverAvailable && (!localStorage.getItem(image) || (now - Number(localStorage.getItem(image)) > 1000 * 60 * 60 * 24))) {
-                         imageElem.src = PLACEHOLDER_IMAGE;
-                         imageElem.dataset.src = image;
-                         lazyImageObserver?.observe(imageElem);
-                     } else {
-                         imageElem.src = image;
-                     }
+            const rebuildList = listOfGames => {
+                const gamesContainer = document.querySelector('.games');
+                const allGames = document.createDocumentFragment();
 
-                     entryElem.appendChild(imageElem);
-                     
-                     const textElem = document.createElement('span');
-                     textElem.classList.add('game-name');
-                     textElem.textContent = name;
-                     entryElem.appendChild(textElem);
+                const now = Date.now();
 
-                     if (blurb?.length > 0) {
-                         const blurbElem = document.createElement('span');
-                         blurbElem.classList.add('game-blurb');
-                         blurbElem.textContent = blurb.replaceAll(`&quot;`, `"`);
-                         entryElem.appendChild(blurbElem);
-                     }
-                     
-                     if (url) {
-                         entryElem.classList.add('dim', 'pointer');
+                const preambleElem = document.createElement('div');
+                preambleElem.classList.add('avenir', 'lh-copy', 'ph4', 'pv2', 'bg-light-gray', 'tc', 'flex', 'justify-center', 'items-center', 'i');
+                preambleElem.style.height = ITEM_HEIGHT;
 
-                         entryElem.addEventListener('click', () => {
-                             window.open(url, '_blank').focus();
-                         });
-                     } 
+                const preambleTextElem = document.createElement('p');
+                preambleTextElem.textContent = `"Sometimes, you look at a game for a few seconds and you just know, man."`;
 
-                     allGames.appendChild(entryElem);
-                 });
+                preambleElem.appendChild(preambleTextElem);
+                allGames.appendChild(preambleElem);
 
-                 if (gamesContainer.childElementCount === 0) {
-                     gamesContainer.appendChild(allGames);
-                 } else {
-                     gamesContainer.replaceChildren(allGames);
-                 }
-             };
+                listOfGames.forEach((entry, index) => {
+                    const [_, name, rawImage, url, blurb] = /"(.+)","(.+)","(.*)","(.*)"/g.exec(entry) ?? [];
 
-             rebuildList(GAMES);
+                    if (!name) return;
 
-             const sortGames = event => {
-                 if (event.target.classList.contains('bg-white')) return;
-                 
-                 const allSortElems = document.querySelectorAll('.sort');
-                 allSortElems.forEach(elem => {
-                     elem.classList.remove('bg-white', 'near-black');
-                 });
-                 event.target.classList.add('bg-white', 'near-black');
+                    let image = rawImage.startsWith('[img]') ? rawImage.substring(5, rawImage.length - 6) : rawImage;
 
-                 if (event.target.classList.contains('name-asc')) {
-                     rebuildList(GAMES_NAME_ASC);
-                 } else if (event.target.classList.contains('name-desc')) {
-                     rebuildList(GAMES_NAME_DESC);
-                 } else {
-                     rebuildList(GAMES);
-                 }
-             };
-             
-             const sortButtons = document.querySelectorAll('.sort');
-             sortButtons.forEach(elem => elem.addEventListener('click', sortGames));
-         })(document, window);
-        </script>
-    </body>
+                    const entryElem = document.createElement('div');
+                    entryElem.classList.add('image', 'ba', 'bw1', 'b--near-black', 'bg-light-gray', 'usn');
+                    entryElem.style.height = ITEM_HEIGHT;
+
+                    const imageElem = document.createElement('img');
+                    imageElem.alt = name;
+
+                    if (isIntersectionObserverAvailable && (!localStorage.getItem(image) || (now - Number(localStorage.getItem(image)) > 1000 * 60 * 60 * 24))) {
+                        imageElem.src = PLACEHOLDER_IMAGE;
+                        imageElem.dataset.src = image;
+                        lazyImageObserver?.observe(imageElem);
+                    } else {
+                        imageElem.src = image;
+                    }
+
+                    entryElem.appendChild(imageElem);
+
+                    const textElem = document.createElement('span');
+                    textElem.classList.add('game-name');
+                    textElem.textContent = name;
+                    entryElem.appendChild(textElem);
+
+                    if (blurb?.length > 0) {
+                        const blurbElem = document.createElement('span');
+                        blurbElem.classList.add('game-blurb');
+                        blurbElem.textContent = blurb.replaceAll(`&quot;`, `"`);
+                        entryElem.appendChild(blurbElem);
+                    }
+
+                    if (url) {
+                        entryElem.classList.add('dim', 'pointer');
+
+                        entryElem.addEventListener('click', () => {
+                            window.open(url, '_blank').focus();
+                        });
+                    }
+
+                    allGames.appendChild(entryElem);
+                });
+
+                if (gamesContainer.childElementCount === 0) {
+                    gamesContainer.appendChild(allGames);
+                } else {
+                    gamesContainer.replaceChildren(allGames);
+                }
+            };
+
+            rebuildList(GAMES);
+
+            const sortGames = event => {
+                if (event.target.classList.contains('bg-white')) return;
+
+                if (event.target.classList.contains('shuffle')) {
+                    rebuildList(shuffle(GAMES));
+                    return;
+                }
+
+                const allSortElems = document.querySelectorAll('.sort');
+                allSortElems.forEach(elem => {
+                    elem.classList.remove('bg-white', 'near-black');
+                });
+                event.target.classList.add('bg-white', 'near-black');
+
+                if (event.target.classList.contains('name-asc')) {
+                    rebuildList(GAMES_NAME_ASC);
+                } else if (event.target.classList.contains('name-desc')) {
+                    rebuildList(GAMES_NAME_DESC);
+                } else {
+                    rebuildList(GAMES);
+                }
+            };
+
+            const sortButtons = document.querySelectorAll('.sort');
+            sortButtons.forEach(elem => elem.addEventListener('click', sortGames));
+        })(document, window);
+    </script>
+</body>
+
 </html>
