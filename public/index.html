@@ -113,7 +113,7 @@
                     class="link pointer usn light-blue dim" href="https://raycatwhodat.newgrounds.com">RaycatWhoDat</a>
                 as of <span class="last-updated">{{LAST_BUILD_DATE}}</span></span></p>
             <div class="sort-bar w-fit ma0 mr2 pa0 pv1 bg-near-black white avenir tc lh-solid nowrap">
-                <span class="sort shuffle pa2 v-mid usn pointer">🎲</span>
+                <span class="sort random-game pa2 v-mid usn pointer">🎲</span>
                 <span class="sort added bg-white near-black ml2 pa2 usn pointer">sort by added</span>
                 <span class="sort name-asc ml2 pa2 usn pointer">sort by name (ascending)</span>
                 <span class="sort name-desc ml2 pa2 usn pointer">sort by name (descending)</span>
@@ -173,7 +173,8 @@
             }
 
             const GAMES = gamesResponse.trim().split('\n').slice(1);
-            const GAMES_RANDOMIZED = [...GAMES];
+            const shuffleAndReturnSteamGames = () => shuffle([...GAMES]).filter(entry => entry.includes('steampowered'));
+            let RANDOM_GAMES = shuffleAndReturnSteamGames();
 
             const GAMES_NAME_ASC = GAMES.toSorted((game1, game2) => {
                 const name1 = /^"(.+)",/.exec(game1)[1];
@@ -260,15 +261,20 @@
             const sortGames = event => {
                 if (event.target.classList.contains('bg-white')) return;
 
+                if (event.target.classList.contains('random-game')) {
+                    if (!RANDOM_GAMES.length) RANDOM_GAMES = shuffleAndReturnSteamGames();
+
+                    const entry = RANDOM_GAMES.pop();
+                    const [/* _ */, name, /* rawImage */, url, /* blurb */] = /"(.+)","(.+)","(.*)","(.*)"/g.exec(entry) ?? [];
+
+                    if (name) window.open(url, '_newtab');
+                    return;
+                }
+
                 const allSortElems = document.querySelectorAll('.sort');
                 allSortElems.forEach(elem => {
                     elem.classList.remove('bg-white', 'near-black');
                 });
-
-                if (event.target.classList.contains('shuffle')) {
-                    rebuildList(shuffle(GAMES_RANDOMIZED));
-                    return;
-                }
 
                 event.target.classList.add('bg-white', 'near-black');
 
