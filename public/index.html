@@ -159,7 +159,7 @@
                         localStorage.setItem(lazyImage.src, `${Date.now()}`);
                         observer.unobserve(lazyImage);
                     });
-                }, { threshold: 0.01 });
+                }, { threshold: 0, rootMargin: ITEM_HEIGHT });
             }
 
             let rawGamesResponse, gamesResponse;
@@ -267,7 +267,7 @@
                     const entry = RANDOM_GAMES.pop();
                     const [/* _ */, name, /* rawImage */, url, /* blurb */] = /"(.+)","(.+)","(.*)","(.*)"/g.exec(entry) ?? [];
 
-                    if (name) window.open(url, '_newtab');
+                    if (name) window.open(url, '_blank');
                     return;
                 }
 
