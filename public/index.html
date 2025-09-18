@@ -127,7 +127,7 @@
     <div class="games w-80 mt4"></div>
 
     <div class="mv4 pv2 w-80 bg-near-black near-white tc">
-        <p class="f4 i avernir">"As a <a class="link pointer usn white dim" href="https://twitch.tv/DNOpls">wise man</a>
+        <p class="f4 i avenir">"As a <a class="link pointer usn white dim" href="https://twitch.tv/DNOpls">wise man</a>
             once said... 'so many game, no many time'."</p>
     </div>
 
@@ -190,8 +190,6 @@
                 const gamesContainer = document.querySelector('.games');
                 const allGames = document.createDocumentFragment();
 
-                const now = Date.now();
-
                 const preambleElem = document.createElement('div');
                 preambleElem.classList.add('avenir', 'lh-copy', 'ph4', 'pv2', 'bg-light-gray', 'tc', 'flex', 'justify-center', 'items-center', 'i');
                 preambleElem.style.height = ITEM_HEIGHT;
@@ -201,6 +199,8 @@
 
                 preambleElem.appendChild(preambleTextElem);
                 allGames.appendChild(preambleElem);
+
+                const now = Date.now();
 
                 listOfGames.forEach((entry, index) => {
                     const [_, name, rawImage, url, blurb] = /"(.+)","(.+)","(.*)","(.*)"/g.exec(entry) ?? [];
