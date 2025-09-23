@@ -79,11 +79,7 @@
             justify-items: stretch;
         }
 
-        @media (width < 1100px) {
-            .logo {
-                text-align: center;
-            }
-
+        @media (width < 1340px) {
             .top-bar {
                 flex-direction: column;
             }
@@ -92,6 +88,12 @@
                 margin-top: 5px;
             }
 
+            .logo {
+                text-align: center;
+            }
+        }
+
+        @media (width < 1100px) {
             .games {
                 grid-template-columns: 1fr;
             }
