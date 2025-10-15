@@ -14,6 +14,14 @@
     <title>[games]</title>
 
     <style>
+        .hidden {
+            display: none;
+        }
+
+        .invisible {
+            visibility: hidden;
+        }
+
         .rozha-one-regular {
             font-family: "Rozha One", serif;
             font-weight: 400;
@@ -72,6 +80,10 @@
             height: 80%;
         }
 
+        .focus {
+            height: 400px;
+        }
+
         .games {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -79,13 +91,19 @@
             justify-items: stretch;
         }
 
-        @media (width < 1340px) {
+        @media (width < 1370px) {
             .top-bar {
                 flex-direction: column;
             }
 
             .sort-bar {
-                margin-top: 5px;
+                margin-top: 10px;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .sort-bar>*:not(last-child) {
+                margin-right: 5px;
             }
 
             .logo {
@@ -94,42 +112,85 @@
         }
 
         @media (width < 1100px) {
+            .focus {
+                flex-direction: column;
+            }
+
+            .focus-image {
+                width: 100%;
+            }
+
+            .focus-description {
+                width: 100%;
+            }
+
+            .focus-entry-info {
+                display: none;
+            }
+
             .games {
                 grid-template-columns: 1fr;
             }
+        }
 
-            .games div:first-child {
-                display: none;
+        @media (width < 780px) {
+            .top-bar {
+                padding: 0;
+            }
+
+            .sort-bar {
+                width: 100%;
+                padding: 0;
+                margin: 10px 0 0;
+                flex-direction: column;
+            }
+
+            .sort-bar>*:not(last-child) {
+                margin-right: 0px;
             }
         }
     </style>
 </head>
 
 <body class="flex flex-column justify-center items-center mb5">
-    <div class="mt4 pv1 w-80">
+    <div class="mt4 w-80">
         <div class="logo rozha-one-regular measure f-headline">
             <p class="mh0 mv3">[games]</p>
         </div>
-        <div class="top-bar f5 bg-near-black white tc avenir flex justify-between">
-            <p class="ma0 ml2 pv1 nowrap"><span class="entries-count"></span> selected by <a
+        <div class="top-bar ph2 f5 bg-near-black white tc athelas flex justify-between items-center">
+            <p class="ma0 pv1 nowrap"><span class="entries-count avenir"></span>games selected by <a
                     class="link pointer usn light-blue dim" href="https://raycatwhodat.newgrounds.com">RaycatWhoDat</a>
                 as of <span class="last-updated">{{LAST_BUILD_DATE}}</span></span></p>
-            <div class="sort-bar w-fit ma0 mr2 pa0 pv1 bg-near-black white avenir tc lh-solid nowrap">
+            <div class="sort-bar w-50 bg-near-black white athelas tc lh-solid nowrap flex justify-around">
                 <span class="sort random-game pa2 v-mid usn pointer">🎲</span>
-                <span class="sort added bg-white near-black ml2 pa2 usn pointer">sort by added</span>
-                <span class="sort name-asc ml2 pa2 usn pointer">sort by name (ascending)</span>
-                <span class="sort name-desc ml2 pa2 usn pointer">sort by name (descending)</span>
-                <a class="link white" href="/feed.xml">
-                    <span class="ml2 pv1 ph3 usn pointer orange b">rss</span>
+                <span class="sort added bg-white near-black pa2 usn pointer">sort by added</span>
+                <span class="sort name-asc pa2 usn pointer">sort by name (ascending)</span>
+                <span class="sort name-desc pa2 usn pointer">sort by name (descending)</span>
+                <a class="link flex justify-center items-center pa2" href="/feed.xml">
+                    <span class="usn pointer orange b">rss</span>
                 </a>
             </div>
         </div>
     </div>
 
-    <div class="games w-80 mt4"></div>
+    <div class="focus invisible hidden w-80 mt5 flex justify-between athelas">
+        <div class="focus-image image w-50 ma0 pa0 ba bw1 b--near-black">
+            <img src="https://placehold.co/500x350" />
+        </div>
+        <div class="focus-description w-50 flex flex-column justify-center items-center tc pv2 ph4">
+            <span class="focus-entry-info f6 lh-copy silver avenir">
+                <span class="focus-date">XX/XX/XXXX</span> —
+                <span class="entry-number">#XXX</span>
+            </span>
+            <span class="focus-entry-title f2 lh-solid bg-near-black near-white pv2 ph4 mv2">Placeholder Game</span>
+            <span class="focus-entry-blurb hidden f3 lh-title">{{BLURB}}</span>
+        </div>
+    </div>
+
+    <div class="games w-80 mt5"></div>
 
     <div class="mv4 pv2 w-80 bg-near-black near-white tc">
-        <p class="f4 i avenir">"As a <a class="link pointer usn white dim" href="https://twitch.tv/DNOpls">wise man</a>
+        <p class="f4 i athelas">"As a <a class="link pointer usn white dim" href="https://twitch.tv/DNOpls">wise man</a>
             once said... 'so many game, no many time'."</p>
     </div>
 
@@ -146,7 +207,7 @@
 
             ///////////////////////////////////////////////////////////////////////
 
-            const PLACEHOLDER_IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=';
+            const PLACEHOLDER_IMAGE = 'https://placehold.co/500x350';
             const ITEM_HEIGHT = '350px';
 
             let lazyImageObserver;
@@ -170,7 +231,7 @@
                 gamesResponse = await rawGamesResponse.text();
             } catch {
                 for (let i = 0; i < 6; i++) {
-                    gamesResponse += `"Placeholder Game","${PLACEHOLDER_IMAGE}","/","${Math.random() > 0.5 ? 'blurb' : ''}"\n`;
+                    gamesResponse += `"Placeholder Game","${PLACEHOLDER_IMAGE}","/","${Math.random() > 0.5 ? 'blurb' : ''}","${Math.random() > 0.8 ? 'y' : ''}"\n`;
                 }
             }
 
@@ -186,69 +247,113 @@
             const GAMES_NAME_DESC = GAMES_NAME_ASC.toReversed();
 
             const entriesCount = document.querySelector('.entries-count');
-            entriesCount.textContent = `${GAMES.length} games`;
+            entriesCount.textContent = `${GAMES.length} `;
+            let isFocusSlotTaken = false;
 
             const rebuildList = listOfGames => {
                 const gamesContainer = document.querySelector('.games');
                 const allGames = document.createDocumentFragment();
 
-                const preambleElem = document.createElement('div');
-                preambleElem.classList.add('avenir', 'lh-copy', 'ph4', 'pv2', 'bg-light-gray', 'tc', 'flex', 'justify-center', 'items-center', 'i');
-                preambleElem.style.height = ITEM_HEIGHT;
-
-                const preambleTextElem = document.createElement('p');
-                preambleTextElem.textContent = `"Sometimes, you look at a game for a few seconds and you just know, man."`;
-
-                preambleElem.appendChild(preambleTextElem);
-                allGames.appendChild(preambleElem);
-
-                const now = Date.now();
+                const now = new Date();
+                const epochTimestamp = +now;
+                const currentDate = now.toLocaleDateString("en-US", {
+                    timeZone: "America/Chicago",
+                });
 
                 listOfGames.forEach((entry, index) => {
-                    const [_, name, rawImage, url, blurb] = /"(.+)","(.+)","(.*)","(.*)"/g.exec(entry) ?? [];
+                    const [_, name, rawImage, url, blurb, isFocused] = /"(.+)","(.+)","(.*)","(.*)","(.*)"/g.exec(entry) ?? [];
 
                     if (!name) return;
 
-                    let image = rawImage.startsWith('[img]') ? rawImage.substring(5, rawImage.length - 6) : rawImage;
+                    const image = rawImage.startsWith('[img]') ? rawImage.substring(5, rawImage.length - 6) : rawImage;
 
-                    const entryElem = document.createElement('div');
-                    entryElem.classList.add('image', 'ba', 'bw1', 'b--near-black', 'bg-light-gray', 'usn');
-                    entryElem.style.height = ITEM_HEIGHT;
+                    if (isFocused && !isFocusSlotTaken) {
+                        isFocusSlotTaken = true;
 
-                    const imageElem = document.createElement('img');
-                    imageElem.alt = name;
+                        const focusElem = document.querySelector('.focus');
+                        focusElem.classList.remove('hidden');
 
-                    if (isIntersectionObserverAvailable && (!localStorage.getItem(image) || (now - Number(localStorage.getItem(image)) > 1000 * 60 * 60 * 24))) {
-                        imageElem.src = PLACEHOLDER_IMAGE;
-                        imageElem.dataset.src = image;
-                        lazyImageObserver?.observe(imageElem);
-                    } else {
-                        imageElem.src = image;
-                    }
+                        const focusImageElem = document.querySelector('.focus-image img');
+                        focusImageElem.alt = name;
+                        focusImageElem.src = image;
 
-                    entryElem.appendChild(imageElem);
+                        const focusDateElem = document.querySelector('.focus-entry-info .focus-date');
+                        focusDateElem.textContent = currentDate;
 
-                    const textElem = document.createElement('span');
-                    textElem.classList.add('game-name');
-                    textElem.textContent = name;
-                    entryElem.appendChild(textElem);
+                        const focusEntryNumberElem = document.querySelector('.focus-entry-info .entry-number');
+                        focusEntryNumberElem.textContent = `#${index + 1}`;
 
-                    if (blurb?.length > 0) {
-                        const blurbElem = document.createElement('span');
-                        blurbElem.classList.add('game-blurb');
-                        blurbElem.textContent = blurb.replaceAll(`&quot;`, `"`);
-                        entryElem.appendChild(blurbElem);
-                    }
+                        const focusEntryTitleElem = document.querySelector('.focus-entry-title');
+                        focusEntryTitleElem.textContent = name;
 
-                    if (url) {
-                        entryElem.classList.add('dim', 'pointer');
+                        if (blurb) {
+                            const focusEntryBlurbElem = document.querySelector('.focus-entry-blurb');
+                            focusEntryBlurbElem.classList.remove('hidden');
+                            focusEntryBlurbElem.textContent = blurb;
+                        }
 
-                        entryElem.addEventListener('click', () => {
-                            window.open(url, '_blank').focus();
+                        focusElem.classList.remove('invisible');
+
+                        const inFocusElem = document.createElement('div');
+                        inFocusElem.classList.add('in-focus', 'image', 'ba', 'b--dashed', 'bw1', 'b--silver', 'bg-light-gray', 'usn', 'athelas', 'dim', 'pointer');
+                        inFocusElem.style.height = ITEM_HEIGHT;
+
+                        const inFocusImageElem = document.createElement('img');
+                        inFocusImageElem.alt = name;
+                        inFocusImageElem.src = `https://placehold.co/275x${Number.parseInt(ITEM_HEIGHT)}@2x.png?font=playfair-display&text=(top+of+page)`;
+
+                        inFocusElem.appendChild(inFocusImageElem);
+
+                        inFocusElem.addEventListener('click', () => {
+                            const elementPosition = focusElem.getBoundingClientRect().top + window.pageYOffset;
+                            const offset = -100;
+                            window.scrollTo({
+                                top: elementPosition + offset,
+                                behavior: 'smooth'
+                            });
                         });
-                    }
 
-                    allGames.appendChild(entryElem);
+                        allGames.appendChild(inFocusElem);
+                    } else {
+                        const entryElem = document.createElement('div');
+                        entryElem.classList.add('image', 'ba', 'bw1', 'b--near-black', 'bg-light-gray', 'usn', 'athelas');
+                        entryElem.style.height = ITEM_HEIGHT;
+
+                        const imageElem = document.createElement('img');
+                        imageElem.alt = name;
+
+                        if (isIntersectionObserverAvailable && (!localStorage.getItem(image) || (epochTimestamp - Number(localStorage.getItem(image)) > 1000 * 60 * 60 * 24))) {
+                            imageElem.src = PLACEHOLDER_IMAGE;
+                            imageElem.dataset.src = image;
+                            lazyImageObserver?.observe(imageElem);
+                        } else {
+                            imageElem.src = image;
+                        }
+
+                        entryElem.appendChild(imageElem);
+
+                        const textElem = document.createElement('span');
+                        textElem.classList.add('game-name');
+                        textElem.textContent = name;
+                        entryElem.appendChild(textElem);
+
+                        if (blurb?.length > 0) {
+                            const blurbElem = document.createElement('span');
+                            blurbElem.classList.add('game-blurb');
+                            blurbElem.textContent = blurb.replaceAll(`&quot;`, `"`);
+                            entryElem.appendChild(blurbElem);
+                        }
+
+                        if (url) {
+                            entryElem.classList.add('dim', 'pointer');
+
+                            entryElem.addEventListener('click', () => {
+                                window.open(url, '_blank').focus();
+                            });
+                        }
+
+                        allGames.appendChild(entryElem);
+                    }
                 });
 
                 if (gamesContainer.childElementCount === 0) {
