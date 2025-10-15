@@ -76,6 +76,10 @@
             object-fit: cover;
         }
 
+        .focus-image {
+            border-style: inset;
+        }
+
         .image img:has(+ span.game-name + span.game-blurb) {
             height: 80%;
         }
@@ -173,12 +177,12 @@
         </div>
     </div>
 
-    <div class="focus invisible hidden w-80 mt5 flex justify-between athelas">
-        <div class="focus-image image w-50 ma0 pa0 ba bw1 b--near-black dim pointer">
+    <div class="focus invisible hidden w-80 mt5 flex justify-between athelas bg-light-gray pa4">
+        <div class="focus-image image w-50 ma0 pa0 ba bw3 b--silver dim pointer">
             <img src="https://placehold.co/500x350" />
         </div>
         <div class="focus-description w-50 flex flex-column justify-center items-center tc pv2 ph4">
-            <span class="focus-entry-info f1 lh-solid silver">
+            <span class="focus-entry-info f1 lh-solid near-black">
                 <span class="entry-number">#XXX</span>
             </span>
             <span class="focus-entry-title f2 lh-solid bg-near-black near-white pv2 ph4 mv3">Placeholder Game</span>
