@@ -174,7 +174,7 @@
     </div>
 
     <div class="focus invisible hidden w-80 mt5 flex justify-between athelas">
-        <div class="focus-image image w-50 ma0 pa0 ba bw1 b--near-black">
+        <div class="focus-image image w-50 ma0 pa0 ba bw1 b--near-black dim pointer">
             <img src="https://placehold.co/500x350" />
         </div>
         <div class="focus-description w-50 flex flex-column justify-center items-center tc pv2 ph4">
@@ -276,6 +276,11 @@
                         const focusImageElem = document.querySelector('.focus-image img');
                         focusImageElem.alt = name;
                         focusImageElem.src = image;
+
+                        const focusImageContainerElem = document.querySelector('.focus-image');
+                        focusImageContainerElem.addEventListener('click', () => {
+                            window.open(url, '_blank').focus();
+                        });
 
                         const focusDateElem = document.querySelector('.focus-entry-info .focus-date');
                         focusDateElem.textContent = currentDate;
