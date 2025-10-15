@@ -272,6 +272,7 @@
 
                     if (isFocused && !isFocusSlotTaken) {
                         isFocusSlotTaken = true;
+                        if (isFocused === 'clear') return;
 
                         const focusElem = document.querySelector('.focus');
                         focusElem.classList.remove('hidden');
@@ -291,7 +292,7 @@
                         const focusEntryTitleElem = document.querySelector('.focus-entry-title');
                         focusEntryTitleElem.textContent = name;
 
-                        if (blurb) {
+                        if (blurb?.length > 0) {
                             const focusEntryBlurbElem = document.querySelector('.focus-entry-blurb');
                             focusEntryBlurbElem.classList.remove('hidden');
                             focusEntryBlurbElem.textContent = blurb;
