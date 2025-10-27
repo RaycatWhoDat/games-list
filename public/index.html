@@ -378,7 +378,7 @@
                     if (!RANDOM_GAMES.length) RANDOM_GAMES = shuffleAndReturnSteamGames();
 
                     const entry = RANDOM_GAMES.pop();
-                    const [name, /* rawImage */, url, /* blurb */, /* focus_code */] = /"(.+)","(.+)","(.*)","(.*)","(.*)"/g.exec(entry) ?? [];
+                    const [/* _ */, name, /* rawImage */, url, /* blurb */, /* focus_code */] = /"(.+)","(.+)","(.*)","(.*)","(.*)"/g.exec(entry) ?? [];
 
                     if (name) window.open(url, '_blank');
                     return;
