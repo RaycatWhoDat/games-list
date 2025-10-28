@@ -251,9 +251,9 @@
 
             const entriesCount = document.querySelector('.entries-count');
             entriesCount.textContent = `${GAMES.length} `;
-            let isFocusSlotTaken = false;
 
             const rebuildList = listOfGames => {
+                let isFocusSlotTaken = false;
                 const gamesContainer = document.querySelector('.games');
                 const allGames = document.createDocumentFragment();
 
