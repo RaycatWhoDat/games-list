@@ -28,7 +28,7 @@ const rssFeedEpilogue = [
 
 console.log(`Parsing top ${numberOfEntries} entries...`);
 for (const entry of entries) {
-  let [_, name, image, url, blurb] = /"(.+)","(.+)","(.*)","(.*)"/g.exec(entry) ?? [];
+  let [_, name, image, url, blurb, /* focus_code */] = /"(.+)","(.+)","(.*)","(.*)","(.*)"/g.exec(entry) ?? [];
 
   image = image.replace(/\[\/?img\]/g, '')
   
