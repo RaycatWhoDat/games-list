@@ -224,7 +224,12 @@ let indexHtml = fs.readFileSync(indexHtmlPath, "utf-8");
 
 // Remove existing noscript block if present (between markers or just the tag)
 const noscriptRegex = /\s*<noscript>[\s\S]*?<\/noscript>/g;
-indexHtml = indexHtml.replace(noscriptRegex, "");
+indexHtml = indexHtml
+  .replace(noscriptRegex, "")
+  .replace(
+    /(<span class="entries-count">).+(<\/span>)/g,
+    `$1${entries.length}$2`
+  );
 
 // Insert noscript block after the games div
 const gamesDiv = '<div class="games w-80 mt4"></div>';
