@@ -181,7 +181,7 @@ for (let i = 0; i < entries.length; i++) {
   listItem += `</li>`;
   textListItems.push(listItem);
 
-  let cardHtml = `        <div class="image ba bw1 b--near-black bg-light-gray athelas">\n`;
+  let cardHtml = `        <div class="image ba bw1 b--near-black bg-light-gray athelas dim">\n`;
 
   if (url) {
     cardHtml += `            <a href="${url}" target="_blank" rel="noopener">\n`;
