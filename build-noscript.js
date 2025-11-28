@@ -111,9 +111,9 @@ const noscriptHtmlPreamble = `<!doctype html>
             </p>
         </div>
         <div class="ph2 f5 bg-near-black white tc athelas flex justify-between items-center">
-            <p class="ma0 pv2 lh-copy">${entries.length} games selected by <a
+            <p class="ma0 pv1 nowrap lh-copy">${entries.length} games selected by <a
                     class="link pointer light-blue dim" href="https://raycatwhodat.newgrounds.com">RaycatWhoDat</a> as of <span class="last-updated">${lastUpdatedDate}</span></p>
-            <div class="pv2">
+            <div class="pv1">
                 <a class="link light-blue dim" href="/">Back to main site</a>
                 <span class="mh2">|</span>
                 <a class="link flex-inline justify-center items-center orange b" href="/feed.xml">rss</a>
@@ -209,6 +209,7 @@ console.log("Writing noscript.html...");
 fs.writeFileSync(path.resolve(__dirname, "public/noscript.html"), noscriptHtml);
 
 const noscriptBlock = `    <noscript>
+        <style>.sort { visibility: hidden; }</style>
         <div class="w-100 mt4 pa3 bg-light-yellow ba b--gold athelas">
             <p class="ma0 f5 mb3">JavaScript is disabled. <a class="link blue dim" href="/noscript.html">View the full visual gallery</a> or browse the text list below:</p>
             <ul class="games-text-list list pl0 mt3 f6">
