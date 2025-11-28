@@ -95,6 +95,29 @@
             justify-items: stretch;
         }
 
+        /* BEGIN NOSCRIPT */
+
+        .games-text-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .games-text-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .games-text-list a {
+            color: #357edd;
+            text-decoration: none;
+        }
+
+        .games-text-list a:hover {
+            text-decoration: underline;
+        }
+
+        /* END NOSCRIPT */
+
         @media (width < 1370px) {
             .top-bar {
                 flex-direction: column;
@@ -159,10 +182,13 @@
 <body class="flex flex-column justify-center items-center mb5">
     <div class="mt4 w-80">
         <div class="logo rozha-one-regular measure f-headline">
-            <p class="mh0 mv3">[games]</p>
+            <p class="mh0 mv3">
+                [games]
+                <span class="measure athelas f5 silver">Games picked solely based on vibes</span>
+            </p>
         </div>
         <div class="top-bar ph2 f5 bg-near-black white tc athelas flex justify-between items-center">
-            <p class="ma0 pv1 nowrap lh-copy"><span class="entries-count"></span>games selected by <a
+            <p class="ma0 pv1 nowrap lh-copy"><span class="entries-count">{{NUMBER_OF_GAMES}}</span>games selected by <a
                     class="link pointer usn light-blue dim" href="https://raycatwhodat.newgrounds.com">RaycatWhoDat</a>
                 as of <span class="last-updated">{{LAST_BUILD_DATE}}</span></span></p>
             <div class="sort-bar w-50 bg-near-black white tc lh-solid nowrap flex justify-around">
