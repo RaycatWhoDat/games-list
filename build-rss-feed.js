@@ -15,7 +15,7 @@ const rssFeedPreamble = [
   '<rss version="2.0">',
   '  <channel>',
   '    <title>[games]</title>',
-  '    <link>https://raycatwhodat.games</link>',
+  '    <link>https://alistof.games</link>',
   '    <description>List of neat/interesting games</description>',
 ];
 
