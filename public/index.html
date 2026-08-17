@@ -369,7 +369,7 @@
 
                         const textElem = document.createElement('span');
                         textElem.classList.add('game-name');
-                        textElem.textContent = name;
+                        textElem.textContent = name.replaceAll(`&quot;`, `"`);
                         entryElem.appendChild(textElem);
 
                         if (blurb?.length > 0) {
