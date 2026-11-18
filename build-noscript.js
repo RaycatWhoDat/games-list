@@ -3,9 +3,20 @@
 const fs = require("fs");
 const path = require("path");
 
+// The blurb author list lives in index.html as a JSON block.
+const BLURB_AUTHORS = JSON.parse(
+  /<script type="application\/json" id="blurb-authors">([\s\S]*?)<\/script>/.exec(
+    fs.readFileSync(path.resolve(__dirname, "public/index.html"), "utf-8")
+  )[1]
+);
+
 const lastUpdatedDate = new Date().toLocaleDateString("en-US", {
   timeZone: "America/Chicago",
 });
+
+// Every field is quoted, and literal quotes are stored as &quot;, so a row is
+// just a sequence of "..." tokens. Fields after focus_code are zero or more blurbs.
+const parseRow = (line) => [...line.matchAll(/"([^"]*)"/g)].map((m) => m[1]);
 
 console.log("Reading games.csv...");
 const rawCsvFile =
@@ -42,49 +53,43 @@ const noscriptHtmlPreamble = `<!doctype html>
         .image {
             position: relative;
             overflow: hidden;
-            text-align: right;
-            height: 350px;
-        }
-
-        .image span {
-            position: absolute;
-            width: 100%;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            right: 0;
-            text-decoration: none;
-            outline: none;
+            flex-direction: column;
+            min-height: 350px;
         }
 
-        .image span.game-name {
-            bottom: 0;
+        /* The image is either a direct child or wrapped in a link */
+        .image > img,
+        .image > a {
+            flex: 1 1 auto;
+            min-height: 0;
+            display: flex;
+        }
+
+        .image img {
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .game-name,
+        .game-blurb {
+            text-align: center;
+        }
+
+        .game-name {
             background-color: white;
             color: black;
             padding: 8px 0;
         }
 
-        .image span.game-name:has(+ span.game-blurb) {
-            bottom: calc(3em + 8px);
-        }
-
-        .image span.game-blurb {
-            padding: 10px 0;
-            height: 2.25em;
-            bottom: 0;
+        .game-blurb {
             background-color: black;
             color: white;
+            padding: 6px 10px;
         }
 
-        .image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .image img:has(+ span.game-name + span.game-blurb) {
-            height: 80%;
+        .game-blurb + .game-blurb {
+            border-top: 1px solid #333;
         }
 
         .games {
@@ -148,8 +153,7 @@ const gameCards = [];
 for (let i = 0; i < entries.length; i++) {
   const entry = entries[i];
   const entryNumber = i + 1;
-  let [_, name, rawImage, url, blurb] =
-    /"(.+)","(.+)","(.*)","(.*)","(.*)"/g.exec(entry) ?? [];
+  const [name, rawImage, url, /* focus_code */, ...blurbs] = parseRow(entry);
 
   if (!name) continue;
 
@@ -158,13 +162,16 @@ for (let i = 0; i < entries.length; i++) {
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
-  const escapedBlurb = blurb
-    ? blurb
+  const escapedBlurbs = blurbs
+    .map((text, i) => ({
+      author: BLURB_AUTHORS[i],
+      text: text
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
-        .replace(/&quot;/g, '"')
-    : "";
+        .replace(/&amp;quot;/g, '"'),
+    }))
+    .filter(({ author, text }) => author && text);
 
   let listItem = `            <li>#${entryNumber}: `;
 
@@ -174,8 +181,8 @@ for (let i = 0; i < entries.length; i++) {
     listItem += escapedName;
   }
 
-  if (escapedBlurb) {
-    listItem += ` - ${escapedBlurb}`;
+  if (escapedBlurbs.length > 0) {
+    listItem += ` - ${escapedBlurbs.map(({ text }) => text).join(" / ")}`;
   }
 
   listItem += `</li>`;
@@ -193,8 +200,8 @@ for (let i = 0; i < entries.length; i++) {
 
   cardHtml += `            <span class="game-name">${escapedName}</span>\n`;
 
-  if (escapedBlurb) {
-    cardHtml += `            <span class="game-blurb">${escapedBlurb}</span>\n`;
+  for (const { author, text } of escapedBlurbs) {
+    cardHtml += `            <span class="game-blurb" style="background-color: ${author.background}; color: ${author.color}">${text}</span>\n`;
   }
 
   cardHtml += `        </div>\n`;

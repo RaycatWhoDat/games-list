@@ -3,7 +3,16 @@
 const fs = require('fs');
 const path = require('path');
 
+// The blurb author list lives in index.html as a JSON block.
+const BLURB_AUTHORS = JSON.parse(
+  /<script type="application\/json" id="blurb-authors">([\s\S]*?)<\/script>/.exec(
+    fs.readFileSync(path.resolve(__dirname, 'public/index.html'), 'utf-8')
+  )[1]
+);
+
 const numberOfEntries = 15;
+
+const parseRow = line => [...line.matchAll(/"([^"]*)"/g)].map(m => m[1]);
 
 console.log('Reading games.csv...');
 const rawCsvFile = fs.readFileSync(path.resolve(__dirname, 'public/games.csv'), 'utf-8').split('\n') ?? [];
@@ -28,14 +37,18 @@ const rssFeedEpilogue = [
 
 console.log(`Parsing top ${numberOfEntries} entries...`);
 for (const entry of entries) {
-  let [_, name, image, url, blurb, /* focus_code */] = /"(.+)","(.+)","(.*)","(.*)","(.*)"/g.exec(entry) ?? [];
+  let [name, image, url, /* focus_code */, ...blurbs] = parseRow(entry);
 
   image = image.replace(/\[\/?img\]/g, '')
-  
+  const blurbHtml = blurbs
+    .filter((text, i) => text && BLURB_AUTHORS[i])
+    .map(text => `<p>${text}</p>`)
+    .join('');
+
   rssFeedItems.push(`    <item>`);
   rssFeedItems.push(`      <title>#${currentGameNumber}: ${name}</title>`);
   rssFeedItems.push(`      <link>${url}</link>`);
-  rssFeedItems.push(`      <description><![CDATA[<img src="${image}"/><br/><p>${blurb}</p>]]></description>`);
+  rssFeedItems.push(`      <description><![CDATA[<img src="${image}"/><br/>${blurbHtml}]]></description>`);
   rssFeedItems.push(`    </item>`);
   currentGameNumber--;
 }
