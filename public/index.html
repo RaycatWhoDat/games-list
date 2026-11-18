@@ -57,6 +57,11 @@
             flex-direction: column;
         }
 
+        /* Needed because .games .image above outranks the plain .hidden rule */
+        .games .image.hidden {
+            display: none;
+        }
+
         .games .image img {
             flex: 1 1 auto;
             min-height: 0;
@@ -112,6 +117,11 @@
             justify-items: stretch;
         }
 
+     .search-names {
+         border: 2px solid black;
+         outline: none;
+     }
+     
         /* BEGIN NOSCRIPT */
 
         .games-text-list {
@@ -155,6 +165,11 @@
 
             .blurb-legend {
                 text-align: center;
+            }
+
+            .sub-bar {
+                flex-direction: column;
+                gap: 8px;
             }
         }
 
@@ -225,7 +240,11 @@
                 </a>
             </div>
         </div>
-        <p class="blurb-legend hidden mt2 mb0 f6 athelas gray tr">blurbs by<span class="blurb-legend-authors"></span></p>
+        <div class="sub-bar flex justify-between items-center mt2">
+            <input class="search-names f6 athelas pa1 ph2 ba b--light-silver bg-white near-black" type="search"
+                placeholder="Find a game..." aria-label="Search game names" autocomplete="off" />
+            <p class="blurb-legend hidden ma0 f6 athelas gray tr">blurbs by<span class="blurb-legend-authors"></span></p>
+        </div>
     </div>
 
     <div class="focus invisible hidden w-80 mt5 mb4 flex justify-between athelas bg-light-gray pa4">
@@ -242,6 +261,7 @@
     </div>
 
     <div class="games w-80 mt4"></div>
+    <p class="no-results hidden w-80 mt4 tc athelas f4 gray">No matches.</p>
 
     <div class="mv4 pv2 w-80 bg-near-black near-white tc">
         <p class="f4 i athelas">"As a <a class="link pointer usn white dim" href="https://twitch.tv/DNOpls">wise man</a>
@@ -319,6 +339,42 @@
                 }));
                 document.querySelector('.blurb-legend').classList.remove('hidden');
             }
+
+            // Name search. Ignores case, accents and punctuation, so
+            // "kettlebell inferno" finds "Kettlebell: Inferno Hotel".
+            const normalizeForSearch = text => text
+                .replaceAll('&quot;', '')
+                .normalize('NFKD')
+                .replace(/\p{M}/gu, '')
+                .toLowerCase()
+                .replace(/[^\p{L}\p{N}]/gu, '');
+
+            const searchInput = document.querySelector('.search-names');
+            const noResultsElem = document.querySelector('.no-results');
+
+            const applySearch = () => {
+                const query = normalizeForSearch(searchInput.value);
+                const cards = document.querySelectorAll('.games > .image');
+                let visibleCount = 0;
+
+                cards.forEach(card => {
+                    // The "(top of page)" placeholder only makes sense in the full list.
+                    const isMatch = query
+                        ? !card.classList.contains('in-focus') && card.dataset.searchName.includes(query)
+                        : true;
+                    card.classList.toggle('hidden', !isMatch);
+                    if (isMatch) visibleCount++;
+                });
+
+                entriesCount.textContent = query ? `${visibleCount} of ${GAMES.length} ` : `${GAMES.length} `;
+                noResultsElem.classList.toggle('hidden', !query || visibleCount > 0);
+            };
+
+            let searchTimeout;
+            searchInput.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(applySearch, 250);
+            });
 
             const rebuildList = listOfGames => {
                 let isFocusSlotTaken = false;
@@ -402,6 +458,7 @@
                         const entryElem = document.createElement('div');
                         entryElem.classList.add('image', 'ba', 'bw1', 'b--near-black', 'bg-light-gray', 'usn', 'athelas');
                         entryElem.style.minHeight = ITEM_HEIGHT;
+                        entryElem.dataset.searchName = normalizeForSearch(name);
 
                         const imageElem = document.createElement('img');
                         imageElem.alt = name;
@@ -447,6 +504,8 @@
                 } else {
                     gamesContainer.replaceChildren(allGames);
                 }
+
+                applySearch();
             };
 
             rebuildList(GAMES);
