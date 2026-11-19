@@ -63,9 +63,10 @@
         }
 
         .games .image img {
-            flex: 1 1 auto;
-            min-height: 0;
+            flex: 1 0 auto;
+            width: 100%;
             height: auto;
+            aspect-ratio: 16 / 9;
         }
 
         .game-name,
@@ -295,7 +296,6 @@
                         if (!entry.isIntersecting) return;
                         let lazyImage = entry.target;
                         lazyImage.src = lazyImage.dataset.src;
-                        localStorage.setItem(lazyImage.src, `${Date.now()}`);
                         observer.unobserve(lazyImage);
                     });
                 }, { threshold: 0, rootMargin: ITEM_HEIGHT });
@@ -382,7 +382,6 @@
                 const allGames = document.createDocumentFragment();
 
                 const now = new Date();
-                const epochTimestamp = +now;
                 const currentDate = now.toLocaleDateString("en-US", {
                     timeZone: "America/Chicago",
                 });
@@ -463,11 +462,13 @@
                         const imageElem = document.createElement('img');
                         imageElem.alt = name;
 
-                        if (isIntersectionObserverAvailable && (!localStorage.getItem(image) || (epochTimestamp - Number(localStorage.getItem(image)) > 1000 * 60 * 60 * 24))) {
+                        if (isIntersectionObserverAvailable) {
                             imageElem.src = PLACEHOLDER_IMAGE;
                             imageElem.dataset.src = image;
                             lazyImageObserver?.observe(imageElem);
                         } else {
+                            // No IntersectionObserver (IE, iOS <= 12.1): let the browser's native lazy loading defer it instead.
+                            imageElem.loading = 'lazy';
                             imageElem.src = image;
                         }
 
