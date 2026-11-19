@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Rozha+One&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css" />
+
+    <link rel="icon" type="image/png" sizes="32x32" href="https://alog-img.b-cdn.net/n8SrLzG.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://alog-img.b-cdn.net/lG8hWO7.png">
+
+    <title>[blurbs]</title>
+
+    <style>
+        .hidden {
+            display: none !important;
+        }
+
+        .rozha-one-regular {
+            font-family: "Rozha One", serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 640px;
+        }
+
+        .card img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            display: block;
+        }
+
+        .game-name {
+            text-align: center;
+            padding: 12px 6px;
+            background-color: white;
+            color: black;
+        }
+
+        .blurb-input {
+            width: 100%;
+            text-align: center;
+            padding: 12px 6px;
+            border: none;
+            outline: none;
+            font: inherit;
+            background-color: #000;
+            color: #fff;
+        }
+
+        .blurb-input::placeholder {
+            color: #777;
+        }
+
+        .btn {
+            border: 2px solid #111;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .btn:disabled {
+            opacity: 0.35;
+            cursor: default;
+        }
+
+        .pending-list li + li {
+            border-top: 1px solid #ddd;
+        }
+
+        .remove {
+            cursor: pointer;
+            border: none;
+            background: none;
+            font: inherit;
+        }
+    </style>
+</head>
+
+<body class="flex flex-column items-center mb5 athelas">
+    <div class="mt4 w-80">
+        <div class="logo rozha-one-regular measure f-headline">
+            <p class="mh0 mv3">
+                [blurbs]
+                <span class="measure athelas f5 silver">Local blurb editor</span>
+            </p>
+        </div>
+        <div class="top-bar ph2 pv1 f5 bg-near-black white flex justify-between items-center flex-wrap">
+            <p class="ma0 pv1 lh-copy"><span class="remaining">0</span> games without blurbs</p>
+            <p class="ma0 pv1 lh-copy"><span class="pending-count">0</span> pending</p>
+        </div>
+    </div>
+
+    <div class="w-80 mt4 flex flex-column items-center">
+        <div class="card ba bw1 b--near-black bg-light-gray">
+            <a class="game-link" target="_blank" rel="noopener"><img class="game-image" alt="" /></a>
+            <span class="game-name"></span>
+            <input class="blurb-input" type="text" placeholder="Write a blurb (or leave empty to skip)..."
+                aria-label="Blurb" autocomplete="off" />
+        </div>
+
+        <div class="flex mt3" style="gap: 10px;">
+            <button class="btn next-btn f5 athelas pv2 ph4 bg-white near-black">next →</button>
+            <button class="btn save-btn f5 athelas pv2 ph4 bg-near-black white" disabled>save</button>
+        </div>
+        <p class="status ma0 mt3 f6 gray tc" aria-live="polite"></p>
+        <p class="empty hidden f4 gray tc">Every game has a blurb. Nice.</p>
+    </div>
+
+    <div class="pending-wrap hidden w-80 mt4" style="max-width: 640px;">
+        <p class="f5 b mb2">Pending blurbs</p>
+        <ul class="pending-list list pa0 ma0 ba b--light-silver bg-white"></ul>
+    </div>
+
+    <script>
+        (async () => {
+            const parseRow = line => [...line.matchAll(/"([^"]*)"/g)].map(m => m[1]);
+            const unescape = text => text.replaceAll('&quot;', '"');
+            const keyOf = game => `${game.name}\u0000${game.url}`;
+
+            const shuffle = arr => {
+                for (let i = arr.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                }
+                return arr;
+            };
+
+            const $ = sel => document.querySelector(sel);
+            const imageElem = $('.game-image');
+            const linkElem = $('.game-link');
+            const nameElem = $('.game-name');
+            const inputElem = $('.blurb-input');
+            const nextBtn = $('.next-btn');
+            const saveBtn = $('.save-btn');
+            const statusElem = $('.status');
+
+            const authors = await fetch('/blurb-authors.json').then(r => r.json()).catch(() => []);
+            if (authors[0]) {
+                inputElem.style.backgroundColor = authors[0].background;
+                inputElem.style.color = authors[0].color;
+                inputElem.placeholder = `Blurb as ${authors[0].name} (empty to skip)...`;
+            }
+
+            const csv = await fetch('/games.csv').then(r => r.text());
+            const pool = shuffle(csv.trim().split('\n').slice(1)
+                .map(parseRow)
+                .filter(([name]) => name)
+                .filter(fields => !fields.slice(4).some(Boolean))
+                .map(([name, rawImage, url]) => ({
+                    name,
+                    url,
+                    image: rawImage.startsWith('[img]') ? rawImage.slice(5, -6) : rawImage,
+                })));
+
+            // key -> { game, text }, in the order they were written.
+            const pending = new Map();
+            let current = null;
+
+            const renderPending = () => {
+                const list = $('.pending-list');
+                list.replaceChildren(...[...pending.entries()].map(([key, { game, text }]) => {
+                    const li = document.createElement('li');
+                    li.className = 'flex justify-between items-start pa2';
+                    const body = document.createElement('span');
+                    body.innerHTML = '<b></b><br><span class="gray"></span>';
+                    body.querySelector('b').textContent = unescape(game.name);
+                    body.querySelector('span').textContent = text;
+                    const remove = document.createElement('button');
+                    remove.className = 'remove gray hover-red ml2';
+                    remove.textContent = '✕';
+                    remove.title = 'Discard this blurb';
+                    remove.addEventListener('click', () => {
+                        pending.delete(key);
+                        pool.unshift(game);
+                        renderCounts();
+                        renderPending();
+                    });
+                    li.append(body, remove);
+                    return li;
+                }));
+                $('.pending-wrap').classList.toggle('hidden', pending.size === 0);
+            };
+
+            const renderCounts = () => {
+                $('.remaining').textContent = pool.length + (current ? 1 : 0);
+                $('.pending-count').textContent = pending.size;
+                saveBtn.disabled = pending.size === 0;
+            };
+
+            const showNext = () => {
+                current = pool.pop() || null;
+                $('.card').classList.toggle('hidden', !current);
+                nextBtn.disabled = !current;
+                $('.empty').classList.toggle('hidden', !!current);
+                if (current) {
+                    imageElem.src = current.image;
+                    imageElem.alt = unescape(current.name);
+                    linkElem.href = current.url;
+                    nameElem.textContent = unescape(current.name);
+                    inputElem.value = '';
+                    inputElem.focus();
+                }
+                renderCounts();
+            };
+
+            const next = () => {
+                if (!current) return;
+                const text = inputElem.value.trim();
+                if (text) {
+                    pending.set(keyOf(current), { game: current, text });
+                    renderPending();
+                } else {
+                    // Skipped games go to the bottom of the pile.
+                    pool.unshift(current);
+                }
+                statusElem.textContent = '';
+                showNext();
+            };
+
+            const save = async () => {
+                if (!pending.size) return;
+                saveBtn.disabled = true;
+                statusElem.textContent = 'Saving...';
+                const batch = [...pending.values()].map(({ game, text }) => ({ name: game.name, url: game.url, text }));
+                try {
+                    const res = await fetch('/blurbs', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(batch),
+                    });
+                    if (!res.ok) throw new Error(await res.text());
+                    const { saved, skipped } = await res.json();
+                    pending.clear();
+                    renderPending();
+                    statusElem.textContent = `Saved ${saved.length} blurb${saved.length === 1 ? '' : 's'} to games.csv.`
+                        + (skipped.length ? ` Skipped ${skipped.length} (already had a blurb or not found): ${skipped.map(unescape).join(', ')}` : '');
+                } catch (err) {
+                    statusElem.textContent = `Save failed: ${err.message}`;
+                }
+                renderCounts();
+            };
+
+            nextBtn.addEventListener('click', next);
+            saveBtn.addEventListener('click', save);
+            inputElem.addEventListener('keydown', event => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    (event.ctrlKey || event.metaKey) ? save() : next();
+                }
+            });
+            window.addEventListener('beforeunload', event => {
+                if (pending.size) event.preventDefault();
+            });
+
+            showNext();
+        })();
+    </script>
+</body>
+
+</html>
