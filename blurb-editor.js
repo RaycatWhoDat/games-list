@@ -5,6 +5,7 @@
 
 const fs = require("fs");
 const http = require("http");
+const { execFileSync } = require("child_process");
 const path = require("path");
 
 const PORT = Number(process.env.PORT) || 4173;
@@ -17,6 +18,25 @@ const INDEX_PATH = path.resolve(__dirname, "public/index.html");
 const parseRow = (line) => [...line.matchAll(/"([^"]*)"/g)].map((m) => m[1]);
 const toRow = (fields) => fields.map((f) => `"${f}"`).join(",");
 const BLURB_START = 4;
+
+// Commits only games.csv (other staged or unstaged work is left alone), then pushes.
+const git = (...args) =>
+  execFileSync("git", args, { cwd: __dirname, encoding: "utf-8", stdio: ["ignore", "pipe", "pipe"] }).trim();
+
+const commitAndPush = (count) => {
+  const message = `Add ${count} blurb${count === 1 ? "" : "s"}`;
+  try {
+    git("commit", "-m", message, "--", "public/games.csv");
+  } catch (err) {
+    return { committed: false, pushed: false, error: `git commit failed: ${(err.stderr || err.message).trim()}` };
+  }
+  try {
+    git("push");
+  } catch (err) {
+    return { committed: true, pushed: false, message, error: `git push failed: ${(err.stderr || err.message).trim()}` };
+  }
+  return { committed: true, pushed: true, message };
+};
 
 const send = (res, status, type, body) => {
   res.writeHead(status, { "Content-Type": type, "Cache-Control": "no-store" });
@@ -81,6 +101,10 @@ const server = http.createServer(async (req, res) => {
         .filter((b) => b.text);
       const result = saveBlurbs(clean);
       console.log(`Saved ${result.saved.length} blurb(s)` + (result.skipped.length ? `, skipped ${result.skipped.length}` : ""));
+      if (result.saved.length) {
+        result.git = commitAndPush(result.saved.length);
+        console.log(result.git.error || `Committed and pushed: ${result.git.message}`);
+      }
       return send(res, 200, "application/json", JSON.stringify(result));
     }
     send(res, 404, "text/plain", "Not found");

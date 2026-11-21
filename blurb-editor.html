@@ -229,7 +229,7 @@
             const save = async () => {
                 if (!pending.size) return;
                 saveBtn.disabled = true;
-                statusElem.textContent = 'Saving...';
+                statusElem.textContent = 'Saving, committing and pushing...';
                 const batch = [...pending.values()].map(({ game, text }) => ({ name: game.name, url: game.url, text }));
                 try {
                     const res = await fetch('/blurbs', {
@@ -238,10 +238,14 @@
                         body: JSON.stringify(batch),
                     });
                     if (!res.ok) throw new Error(await res.text());
-                    const { saved, skipped } = await res.json();
+                    const { saved, skipped, git } = await res.json();
                     pending.clear();
                     renderPending();
+                    const gitNote = !git ? ''
+                        : git.pushed ? ` Committed and pushed ("${git.message}").`
+                        : ` ${git.error}`;
                     statusElem.textContent = `Saved ${saved.length} blurb${saved.length === 1 ? '' : 's'} to games.csv.`
+                        + gitNote
                         + (skipped.length ? ` Skipped ${skipped.length} (already had a blurb or not found): ${skipped.map(unescape).join(', ')}` : '');
                 } catch (err) {
                     statusElem.textContent = `Save failed: ${err.message}`;
